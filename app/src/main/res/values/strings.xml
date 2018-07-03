@@ -2,4 +2,10 @@
     <string name="app_name">Food Ordering App</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="forgot_password_text">Please fill in the email address for password</string>
+    <string name="email">E-mail Address:</string>
+    <string name="send">Send</string>
+    <string name="old_password">Old Password:</string>
+    <string name="New">New:</string>
+    <string name="confirm_new">Confirm New:</string>
 </resources>
