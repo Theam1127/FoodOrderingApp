@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "625209405813",
+    "firebase_url": "https://food-ordering-system-67c11.firebaseio.com",
+    "project_id": "food-ordering-system-67c11",
+    "storage_bucket": "food-ordering-system-67c11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625209405813:android:26faf59e2fa8b0d1",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.foodorderingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625209405813-c84rt8q6iafd736i5c0blaetq77502fm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsFj2PTZIfNJr_D_mz2jCyanqOffRM5WA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

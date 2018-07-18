@@ -8,4 +8,9 @@
     <string name="old_password">Old Password:</string>
     <string name="New">New:</string>
     <string name="confirm_new">Confirm New:</string>
+    <string name="tableNo">Table No: </string>
+    <string name="orderItems">Ordered Items: </string>
+    <string name="add_item">Add Item</string>
+    <string name="make_payment">Make Payment</string>
+    <string name="total_price">Total Price: </string>
 </resources>
