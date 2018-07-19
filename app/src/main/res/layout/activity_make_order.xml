@@ -34,19 +34,6 @@
         app:layout_constraintStart_toEndOf="@+id/tableNoTV"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/orderListLV"
-        android:layout_width="0dp"
-        android:layout_height="385dp"
-        android:layout_margin="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="204dp"
-        android:background="@drawable/list_view_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderedItemsTV" />
 
     <TextView
         android:id="@+id/orderedItemsTV"
@@ -80,9 +67,9 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
         android:layout_marginStart="8dp"
         android:text="@string/make_payment"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,30 +81,84 @@
         android:id="@+id/totalPriceTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        app:layout_constraintBottom_toTopOf="@+id/makePaymentBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewTotalPrice"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderListLV"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/textViewTotalPrice"
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
         android:id="@+id/textViewTotalPrice"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="18dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="156dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="156dp"
-        android:layout_marginTop="8dp"
         android:text="@string/total_price"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        app:layout_constraintBottom_toTopOf="@+id/makePaymentBtn"
         app:layout_constraintEnd_toStartOf="@+id/totalPriceTV"
-        app:layout_constraintHorizontal_bias="0.796"
+        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/list_view_border"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTotalPrice"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderListLV" />
+        app:layout_constraintTop_toBottomOf="@+id/orderedItemsTV">
+
+        <TextView
+            android:id="@+id/tvTitleQuantity"
+            android:layout_width="132dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/tvTitleItemName"
+            android:paddingEnd="3dp"
+            android:text="@string/quantity"
+            android:textAlignment="center"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+        <TextView
+            android:id="@+id/tvTitleItemName"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:text="@string/Item_name"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+        <TextView
+            android:id="@+id/tvTitleTotal"
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-1dp"
+            android:layout_toEndOf="@+id/tvTitleQuantity"
+            android:paddingEnd="5dp"
+            android:text="@string/total"
+            android:textAlignment="textEnd"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+        <ListView
+            android:id="@+id/orderListLV"
+            android:layout_width="match_parent"
+            android:layout_height="414dp"
+            android:layout_below="@+id/tvTitleQuantity"
+            android:background="@drawable/list_view_border" />
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
