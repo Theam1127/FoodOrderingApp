@@ -1,6 +1,8 @@
 package my.edu.tarc.foodorderingapp;
 
-public class Menu {
+import java.io.Serializable;
+
+public class Menu implements Serializable{
     public String menuID;
     public String name;
     public String type;

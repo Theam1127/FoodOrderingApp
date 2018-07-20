@@ -22,8 +22,10 @@
         <activity android:name=".ForgotPassword" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".MaintenanceSetting" />
-        <activity android:name=".AddOrderItem"
-            android:windowSoftInputMode="adjustNothing"></activity>
+        <activity
+            android:name=".AddOrderItem"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".ConfirmAddOrderItem"></activity>
     </application>
 
 </manifest>

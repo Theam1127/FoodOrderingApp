@@ -1,9 +1,12 @@
 package my.edu.tarc.foodorderingapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,6 +26,7 @@ public class AddOrderItem extends AppCompatActivity {
     EditText searchText;
     Spinner filterDropDown;
     ListView menuList;
+    List<Menu> menu = new ArrayList<>();
     List<String> menuItems = new ArrayList<>();
     List<String> filterItems = new ArrayList<>();
     ArrayAdapter menuListAdapter, filterListAdapter;
@@ -45,7 +49,14 @@ public class AddOrderItem extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    menuItems.add((String)documentSnapshot.getData().get("menuName"));
+                    String menuID = ""+documentSnapshot.getData().get("menuID");
+                    boolean available = (boolean)documentSnapshot.getData().get("menuStatus");
+                    String name = ""+documentSnapshot.getData().get("menuName");
+                    double price = Double.parseDouble(""+documentSnapshot.getData().get("menuPrice"));
+                    String type = ""+documentSnapshot.getData().get("menuType");
+                    Menu item = new Menu(menuID, name,type,available,price);
+                    menu.add(item);
+                    menuItems.add(name);
                     if(!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))
                         filterItems.add(documentSnapshot.getData().get("menuType").toString());
                 }
@@ -54,8 +65,18 @@ public class AddOrderItem extends AppCompatActivity {
                 filterListAdapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_dropdown_item_1line,filterItems);
                 filterDropDown.setAdapter(filterListAdapter);
                 pd.dismiss();
+
+                menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(getApplicationContext(),ConfirmAddOrderItem.class);
+                        intent.putExtra("orderItem", menu.get(i));
+                        startActivity(intent);
+                    }
+                });
             }
         });
+
     }
 
 
