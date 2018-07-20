@@ -17,6 +17,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
     EditText etOrderQuantity;
     Menu menuItem;
     double total;
+    int qty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
         btnConfirm = findViewById(R.id.btnConfirm);
         btnCancel = findViewById(R.id.buttonCancel);
         etOrderQuantity = findViewById(R.id.editTextOrderQuantity);
-        Intent intent = getIntent();
-        menuItem = (Menu)intent.getSerializableExtra("orderItem");
+        menuItem = (Menu)getIntent().getSerializableExtra("menuItem");
         tvItemName.setText(menuItem.getName());
         tvUnitPrice.setText("RM "+String.format("%.2f",menuItem.getPrice()));
         etOrderQuantity.setText("0");
@@ -55,11 +55,11 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                     etOrderQuantity.setText("0");
                     etOrderQuantity.selectAll();
                 }
-                int qty = Integer.parseInt(etOrderQuantity.getText().toString());
+                qty = Integer.parseInt(etOrderQuantity.getText().toString());
 
                 double price = menuItem.getPrice();
-                price *= qty;
-                tvTotalAmount.setText(String.format("RM %.2f", price));
+                total = price*qty;
+                tvTotalAmount.setText(String.format("RM %.2f", total));
             }
 
             @Override
@@ -71,7 +71,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
         btnIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int qty = Integer.parseInt(etOrderQuantity.getText().toString());
+                qty = Integer.parseInt(etOrderQuantity.getText().toString());
                 qty++;
                 etOrderQuantity.setText(Integer.toString(qty));
             }
@@ -80,7 +80,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
         btnDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int qty = Integer.parseInt(etOrderQuantity.getText().toString());
+                qty = Integer.parseInt(etOrderQuantity.getText().toString());
                 if(qty!=0)
                     qty--;
                 etOrderQuantity.setText(Integer.toString(qty));
@@ -92,6 +92,13 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
             public void onClick(View view) {
                 if(etOrderQuantity.getText().toString().equals("0"))
                     Toast.makeText(getApplicationContext(), "Quantity should not be 0", Toast.LENGTH_SHORT).show();
+                else{
+                    Orders order = new Orders(menuItem.getMenuID(), qty, total);
+                    Intent intent = new Intent();
+                    intent.putExtra("confirmOrder", order);
+                    setResult(AddOrderItem.ADD_ITEM_REQUEST, intent);
+                    finish();
+                }
             }
         });
     }
