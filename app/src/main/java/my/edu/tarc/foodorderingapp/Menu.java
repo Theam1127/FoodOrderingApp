@@ -3,8 +3,7 @@ package my.edu.tarc.foodorderingapp;
 import java.io.Serializable;
 
 public class Menu implements Serializable{
-    public String firebaseID;
-    public String menuID;
+    public int menuID;
     public String name;
     public String type;
     public boolean available;
@@ -12,8 +11,7 @@ public class Menu implements Serializable{
 
     public Menu(){}
 
-    public Menu(String firebaseID, String menuID, String name, String type, boolean available, double price) {
-        this.firebaseID = firebaseID;
+    public Menu(int menuID, String name, String type, boolean available, double price) {
         this.menuID = menuID;
         this.name = name;
         this.type = type;
@@ -22,19 +20,11 @@ public class Menu implements Serializable{
     }
 
 
-    public String getFirebaseID() {
-        return firebaseID;
-    }
-
-    public void setFirebaseID(String firebaseID) {
-        this.firebaseID = firebaseID;
-    }
-
-    public String getMenuID() {
+    public int getMenuID() {
         return menuID;
     }
 
-    public void setMenuID(String menuID) {
+    public void setMenuID(int menuID) {
         this.menuID = menuID;
     }
 

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "625209405813-51q7fctphs0bpk6pvne61jrjvjuraje7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "my.edu.tarc.foodorderingapp",
+            "certificate_hash": "d0bd63dd5ebd1edeb5e0e010db268eee3607f872"
+          }
+        },
+        {
           "client_id": "625209405813-c84rt8q6iafd736i5c0blaetq77502fm.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625209405813-c84rt8q6iafd736i5c0blaetq77502fm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

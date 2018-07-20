@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends BaseAdapter implements ListAdapter {
-    private List<Menu> menuList = new ArrayList<Menu>();
+    private List<Menu> menuList;
     private Context context;
 
     public OrderListAdapter(List<Menu> menuList, Context context) {

@@ -49,13 +49,12 @@ public class AddOrderItem extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    String documentID = ""+documentSnapshot.getId();
-                    String menuID = ""+documentSnapshot.getData().get("menuID");
+                    int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
                     boolean available = (boolean)documentSnapshot.getData().get("menuStatus");
                     String name = ""+documentSnapshot.getData().get("menuName");
-                    double price = Double.parseDouble(""+documentSnapshot.getData().get("menuPrice"));
+                    double price = Double.parseDouble(documentSnapshot.getData().get("menuPrice").toString());
                     String type = ""+documentSnapshot.getData().get("menuType");
-                    Menu item = new Menu(documentID, menuID, name,type,available,price);
+                    Menu item = new Menu(menuID, name,type,available,price);
                     menu.add(item);
                     menuItems.add(name);
                     if(!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))

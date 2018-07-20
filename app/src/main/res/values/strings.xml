@@ -22,4 +22,5 @@
     <string name="plus">+</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="remove_item">Remove Item</string>
 </resources>
