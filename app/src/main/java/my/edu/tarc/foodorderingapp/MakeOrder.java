@@ -154,12 +154,11 @@ public class MakeOrder extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == ADD_ORDER_ITEM){
+        if(resultCode == ADD_ORDER_ITEM) {
             pd.show();
-            Orders order = (Orders)data.getSerializableExtra("addOrder");
-            Map<String, Object> newOrder = new HashMap<>();
+            final Orders order = (Orders) data.getSerializableExtra("addOrder");
             Map<String, Object> placeOrder = new HashMap<>();
-            if(orderID==0) {
+            if (orderID == 0) {
                 orderID = nextID;
                 placeOrder.put("orderDate", FieldValue.serverTimestamp());
                 placeOrder.put("orderID", orderID);
@@ -167,15 +166,41 @@ public class MakeOrder extends AppCompatActivity {
                 placeOrder.put("tableNumber", tableNumber);
                 db.collection("PlacedOrder").add(placeOrder);
             }
-            newOrder.put("menuID", order.getMenuID());
-            newOrder.put("orderID", orderID);
-            newOrder.put("quantity", order.getQuantity());
-            newOrder.put("subtotal", order.getTotal());
-            newOrder.put("insertDate", FieldValue.serverTimestamp());
-            db.collection("OrderDetail").add(newOrder).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            db.collection("OrderDetail").whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Toast.makeText(getApplicationContext(),"Order Added.",Toast.LENGTH_SHORT).show();
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    Map<String, Object> newOrder = new HashMap<>();
+                    if (task.getResult().isEmpty()) {
+                        newOrder.put("menuID", order.getMenuID());
+                        newOrder.put("orderID", orderID);
+                        newOrder.put("quantity", order.getQuantity());
+                        newOrder.put("subtotal", order.getTotal());
+                        newOrder.put("insertDate", FieldValue.serverTimestamp());
+                        db.collection("OrderDetail").add(newOrder).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        int quantity = 0;
+                        double total = 0;
+                        String docID = "";
+                        for (QueryDocumentSnapshot d : task.getResult()) {
+                            docID = d.getId();
+                            quantity = Integer.parseInt(d.getData().get("quantity").toString());
+                            total = Double.parseDouble(d.getData().get("subtotal").toString());
+                        }
+                        newOrder.put("quantity", order.getQuantity() + quantity);
+                        newOrder.put("subtotal", order.getTotal() + total);
+                        db.collection("OrderDetail").document(docID).update(newOrder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
                 }
             });
         }
