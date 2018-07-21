@@ -230,7 +230,12 @@ public class MakeOrder extends AppCompatActivity {
                             Map<String, Object> editOrder = new HashMap<>();
                             editOrder.put("quantity", order.getQuantity());
                             editOrder.put("subtotal", order.getTotal());
-                            db.collection("OrderDetail").document(docID).update(editOrder);
+                            db.collection("OrderDetail").document(docID).update(editOrder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    loadData();
+                                }
+                            });
                         } else {
                             db.collection("OrderDetail").document(docID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

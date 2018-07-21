@@ -108,7 +108,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                 if(etOrderQuantity.getText().toString().equals("0"))
                     Toast.makeText(getApplicationContext(), "Quantity should not be 0", Toast.LENGTH_SHORT).show();
                 else{
-                    if(!menuItem.equals(null)) {
+                    if(menuItem!=null) {
                         Orders order = new Orders(menuItem.getMenuID(), qty, total);
                         Intent intent = new Intent();
                         intent.putExtra("confirmOrder", order);
