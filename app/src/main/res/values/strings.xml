@@ -21,4 +21,9 @@
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="cancel">Cancel</string>
+    <string-array name="test">
+        <item>asfasd</item>
+        <item>afsadfsadwq</item>
+        <item>asdfeeefdewf</item>
+    </string-array>
 </resources>
