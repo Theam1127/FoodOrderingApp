@@ -18,14 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Payment" />
+        <activity android:name=".MakePayment" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".MaintenanceSetting" />
         <activity
             android:name=".AddOrderItem"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ConfirmAddOrderItem"></activity>
+        <activity android:name=".ConfirmAddOrderItem"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".GenerateReport"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
