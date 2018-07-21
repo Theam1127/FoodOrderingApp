@@ -72,6 +72,7 @@ public class MakeOrder extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MakePayment.class);
                     intent.putExtra("totalAmount", total);
                     intent.putExtra("orderID", orderID);
+                    intent.putExtra("tableNumber", tableNumber);
                     startActivity(intent);
                 }
             }

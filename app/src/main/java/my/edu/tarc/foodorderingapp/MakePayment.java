@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MakePayment extends AppCompatActivity {
-    TextView tvTotal, tvChanges, tvStatus;
+    TextView tvTotal, tvChanges, tvStatus, tvTableNo;
     EditText etAmountPaid;
     Button btnPay, btnBack;
     int nextID;
@@ -34,6 +34,8 @@ public class MakePayment extends AppCompatActivity {
         setContentView(R.layout.activity_make_payment);
         final double total = getIntent().getDoubleExtra("totalAmount", 0.0);
         final int orderID = getIntent().getIntExtra("orderID", 0);
+        final int tableNo = getIntent().getIntExtra("tableNumber", 0);
+        tvTableNo = findViewById(R.id.tvtblNo);
         tvTotal = findViewById(R.id.tvTotalAmount);
         tvChanges = findViewById(R.id.tvChanges);
         tvStatus = findViewById(R.id.tvPayStatus);
@@ -41,6 +43,7 @@ public class MakePayment extends AppCompatActivity {
         btnPay = findViewById(R.id.buttonPay);
         btnBack = findViewById(R.id.btnBack);
         tvStatus.setText("");
+        tvTableNo.setText(""+tableNo);
         tvTotal.setText(String.format("RM %.2f", total));
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
