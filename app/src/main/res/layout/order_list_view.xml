@@ -12,7 +12,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingStart="5dp"
-        android:textAlignment="textStart" />
+        android:textAlignment="textStart"
+        android:textColor="@android:color/background_dark" />
 
     <TextView
         android:id="@+id/tvQuantity"
@@ -20,7 +21,8 @@
         android:layout_height="40dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark" />
 
     <TextView
         android:id="@+id/tvPrice"
@@ -29,5 +31,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingEnd="5dp"
-        android:textAlignment="textEnd" />
+        android:textAlignment="textEnd"
+        android:textColor="@android:color/background_dark" />
 </LinearLayout>

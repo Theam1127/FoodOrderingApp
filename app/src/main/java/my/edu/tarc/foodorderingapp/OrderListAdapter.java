@@ -12,22 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends BaseAdapter implements ListAdapter {
-    private List<Menu> menuList = new ArrayList<Menu>();
+    private List<Orders> orderList;
+    private List<String> menuNames;
     private Context context;
 
-    public OrderListAdapter(List<Menu> menuList, Context context) {
-        this.menuList = menuList;
+    public OrderListAdapter(List<String> menuNames, List<Orders> orderList, Context context) {
+        this.menuNames=menuNames;
+        this.orderList = orderList;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return menuList.size();
+        return orderList.size();
     }
 
     @Override
     public Object getItem(int pos){
-        return menuList.get(pos);
+        return orderList.get(pos);
     }
 
     @Override
@@ -44,9 +46,9 @@ public class OrderListAdapter extends BaseAdapter implements ListAdapter {
         TextView menuItem = (TextView)view.findViewById(R.id.tvMenuItem);
         TextView itemQty = (TextView)view.findViewById(R.id.tvQuantity);
         TextView itemTotalPrice = (TextView)view.findViewById(R.id.tvPrice);
-        menuItem.setText(menuList.get(position).getName());
-        itemQty.setText(""+5);
-        itemTotalPrice.setText(String.format("%.2f",menuList.get(position).getPrice()));
+        menuItem.setText(menuNames.get(position));
+        itemQty.setText(""+orderList.get(position).getQuantity());
+        itemTotalPrice.setText(String.format("%.2f",orderList.get(position).getTotal()));
         return view;
     }
 

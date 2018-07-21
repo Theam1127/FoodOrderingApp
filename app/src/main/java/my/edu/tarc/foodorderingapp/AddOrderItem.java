@@ -31,6 +31,7 @@ public class AddOrderItem extends AppCompatActivity {
     List<String> filterItems = new ArrayList<>();
     ArrayAdapter menuListAdapter, filterListAdapter;
     ProgressDialog pd;
+    static final int ADD_ITEM_REQUEST = 101;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +50,10 @@ public class AddOrderItem extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    String menuID = ""+documentSnapshot.getData().get("menuID");
+                    int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
                     boolean available = (boolean)documentSnapshot.getData().get("menuStatus");
                     String name = ""+documentSnapshot.getData().get("menuName");
-                    double price = Double.parseDouble(""+documentSnapshot.getData().get("menuPrice"));
+                    double price = Double.parseDouble(documentSnapshot.getData().get("menuPrice").toString());
                     String type = ""+documentSnapshot.getData().get("menuType");
                     Menu item = new Menu(menuID, name,type,available,price);
                     menu.add(item);
@@ -70,14 +71,25 @@ public class AddOrderItem extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(),ConfirmAddOrderItem.class);
-                        intent.putExtra("orderItem", menu.get(i));
-                        startActivity(intent);
+                        intent.putExtra("menuItem", menu.get(i));
+                        startActivityForResult(intent, ADD_ITEM_REQUEST);
                     }
                 });
             }
         });
 
+
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==ADD_ITEM_REQUEST && resultCode!=RESULT_CANCELED){
+            Orders order = (Orders)data.getSerializableExtra("confirmOrder");
+            Intent intent = new Intent();
+            intent.putExtra("addOrder", order);
+            setResult(MakeOrder.ADD_ORDER_ITEM, intent);
+            finish();
+        }
+    }
 }

@@ -3,7 +3,7 @@ package my.edu.tarc.foodorderingapp;
 import java.io.Serializable;
 
 public class Menu implements Serializable{
-    public String menuID;
+    public int menuID;
     public String name;
     public String type;
     public boolean available;
@@ -11,7 +11,7 @@ public class Menu implements Serializable{
 
     public Menu(){}
 
-    public Menu(String menuID, String name, String type, boolean available, double price) {
+    public Menu(int menuID, String name, String type, boolean available, double price) {
         this.menuID = menuID;
         this.name = name;
         this.type = type;
@@ -19,11 +19,12 @@ public class Menu implements Serializable{
         this.price = price;
     }
 
-    public String getMenuID() {
+
+    public int getMenuID() {
         return menuID;
     }
 
-    public void setMenuID(String menuID) {
+    public void setMenuID(int menuID) {
         this.menuID = menuID;
     }
 
