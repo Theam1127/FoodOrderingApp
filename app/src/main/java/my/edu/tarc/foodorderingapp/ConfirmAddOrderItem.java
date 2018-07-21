@@ -13,10 +13,12 @@ import android.widget.Toast;
 
 public class ConfirmAddOrderItem extends AppCompatActivity {
     TextView tvItemName, tvUnitPrice, tvTotalAmount;
-    Button btnIncrease, btnDecrease, btnConfirm, btnCancel;
+    Button btnIncrease, btnDecrease, btnConfirm, btnCancel, btnRemoveItem;
     EditText etOrderQuantity;
     Menu menuItem;
-    double total;
+    Orders orderItem;
+    String orderItemName;
+    double unitPrice, total;
     int qty;
 
     @Override
@@ -30,12 +32,25 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
         btnDecrease = findViewById(R.id.buttonDecrease);
         btnConfirm = findViewById(R.id.btnConfirm);
         btnCancel = findViewById(R.id.btnBack);
+        btnRemoveItem = findViewById(R.id.buttonRemoveItem);
         etOrderQuantity = findViewById(R.id.editTextOrderQuantity);
         menuItem = (Menu)getIntent().getSerializableExtra("menuItem");
-        tvItemName.setText(menuItem.getName());
-        tvUnitPrice.setText("RM "+String.format("%.2f",menuItem.getPrice()));
-        etOrderQuantity.setText("0");
-        total = Integer.parseInt(etOrderQuantity.getText().toString()) * menuItem.getPrice();
+        qty = 0;
+        if(menuItem == null){
+            orderItem = (Orders)getIntent().getSerializableExtra("editOrderedItem");
+            orderItemName = getIntent().getStringExtra("editOrderItemName");
+            unitPrice = orderItem.getTotal()/orderItem.getQuantity();
+            qty = orderItem.getQuantity();
+            btnRemoveItem.setVisibility(View.VISIBLE);
+        }
+        else{
+            orderItemName = menuItem.getName();
+            unitPrice = menuItem.getPrice();
+        }
+        tvItemName.setText(orderItemName);
+        tvUnitPrice.setText("RM "+String.format("%.2f",unitPrice));
+        etOrderQuantity.setText(""+qty);
+        total = qty * unitPrice;
         tvTotalAmount.setText("RM "+String.format("%.2f",total));
         etOrderQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +72,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                 }
                 qty = Integer.parseInt(etOrderQuantity.getText().toString());
 
-                double price = menuItem.getPrice();
+                double price = unitPrice;
                 total = price*qty;
                 tvTotalAmount.setText(String.format("RM %.2f", total));
             }
@@ -93,12 +108,33 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                 if(etOrderQuantity.getText().toString().equals("0"))
                     Toast.makeText(getApplicationContext(), "Quantity should not be 0", Toast.LENGTH_SHORT).show();
                 else{
-                    Orders order = new Orders(menuItem.getMenuID(), qty, total);
-                    Intent intent = new Intent();
-                    intent.putExtra("confirmOrder", order);
-                    setResult(AddOrderItem.ADD_ITEM_REQUEST, intent);
-                    finish();
+                    if(menuItem!=null) {
+                        Orders order = new Orders(menuItem.getMenuID(), qty, total);
+                        Intent intent = new Intent();
+                        intent.putExtra("confirmOrder", order);
+                        setResult(AddOrderItem.ADD_ITEM_REQUEST, intent);
+                        finish();
+                    }
+                    else{
+                        orderItem.setTotal(total);
+                        orderItem.setQuantity(qty);
+                        Intent intent = new Intent();
+                        intent.putExtra("editedOrderItem", orderItem);
+                        setResult(MakeOrder.EDIT_ORDER_ITEM, intent);
+                        finish();
+                    }
                 }
+            }
+        });
+
+        btnRemoveItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("editedOrderItem", orderItem);
+                intent.putExtra("removeEditItem", true);
+                setResult(MakeOrder.EDIT_ORDER_ITEM,intent);
+                finish();
             }
         });
     }

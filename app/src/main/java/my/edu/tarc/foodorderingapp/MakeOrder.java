@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,13 +43,15 @@ public class MakeOrder extends AppCompatActivity {
     Orders o;
     double total;
     int nextID = 1;
-    static final int ADD_ORDER_ITEM = 102;
+    static final int ADD_ORDER_ITEM = 102, EDIT_ORDER_ITEM = 103;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_order);
         addItemBtn = (Button) findViewById(R.id.addItemBtn);
         makePaymentBtn = (Button) findViewById(R.id.makePaymentBtn);
+        tableNo = (TextView) findViewById(R.id.tableNo);
+        orderList = (ListView) findViewById(R.id.orderListLV);
         tableNumber = 1;
         pd = new ProgressDialog(this);
         pd.setMessage("Please Wait...");
@@ -77,11 +80,16 @@ public class MakeOrder extends AppCompatActivity {
                 }
             }
         });
-
-
-        tableNo = (TextView) findViewById(R.id.tableNo);
-        orderList = (ListView) findViewById(R.id.orderListLV);
         tableNo.setText("" + tableNumber);
+        orderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(),ConfirmAddOrderItem.class);
+                intent.putExtra("editOrderedItem", orders.get(i));
+                intent.putExtra("editOrderItemName", menus.get(i));
+                startActivityForResult(intent, EDIT_ORDER_ITEM);
+            }
+        });
     }
 
 
@@ -146,7 +154,7 @@ public class MakeOrder extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==ADD_ORDER_ITEM && resultCode!=RESULT_CANCELED){
+        if(resultCode == ADD_ORDER_ITEM){
             pd.show();
             Orders order = (Orders)data.getSerializableExtra("addOrder");
             Map<String, Object> newOrder = new HashMap<>();
@@ -171,7 +179,35 @@ public class MakeOrder extends AppCompatActivity {
                 }
             });
         }
-    }
+        else if(resultCode==EDIT_ORDER_ITEM){
+            final Orders order = (Orders)data.getSerializableExtra("editedOrderItem");
+            final boolean remove = data.getBooleanExtra("removeEditItem", false);
+            db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            String docID = "";
+                            for (QueryDocumentSnapshot doc : task.getResult())
+                                docID = doc.getId();
+                            if (!remove) {
+                                Map<String, Object> editOrder = new HashMap<>();
+                                editOrder.put("quantity", order.getQuantity());
+                                editOrder.put("subtotal", order.getTotal());
+                                db.collection("OrderDetail").document(docID).update(editOrder);
+                            } else {
+                                db.collection("OrderDetail").document(docID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful())
+                                            Toast.makeText(getApplicationContext(), "Item removed.", Toast.LENGTH_SHORT);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
     @Override
     protected void onRestart() {
