@@ -23,4 +23,9 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="remove_item">Remove Item</string>
+    <string name="amount_paid">Amount Paid: </string>
+    <string name="changes">Changes:</string>
+    <string name="pay">Pay</string>
+    <string name="back">Back</string>
+    <string name="rm">RM</string>
 </resources>

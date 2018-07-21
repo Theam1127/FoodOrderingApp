@@ -29,7 +29,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
         btnIncrease = findViewById(R.id.buttonIncrease);
         btnDecrease = findViewById(R.id.buttonDecrease);
         btnConfirm = findViewById(R.id.btnConfirm);
-        btnCancel = findViewById(R.id.buttonCancel);
+        btnCancel = findViewById(R.id.btnBack);
         etOrderQuantity = findViewById(R.id.editTextOrderQuantity);
         menuItem = (Menu)getIntent().getSerializableExtra("menuItem");
         tvItemName.setText(menuItem.getName());
