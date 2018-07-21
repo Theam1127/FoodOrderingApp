@@ -48,7 +48,7 @@ public class MakePayment extends AppCompatActivity {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                paidAmount = Double.parseDouble(etAmountPaid.getText().toString());
+                paidAmount = etAmountPaid.getText().toString().isEmpty()? 0 : Double.parseDouble(etAmountPaid.getText().toString());
                 if(paidAmount == 0){
                     etAmountPaid.setError("Please enter amount!");
                 }
