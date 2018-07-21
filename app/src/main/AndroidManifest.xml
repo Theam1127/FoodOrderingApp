@@ -25,7 +25,8 @@
         <activity
             android:name=".AddOrderItem"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ConfirmAddOrderItem"></activity>
+        <activity android:name=".ConfirmAddOrderItem" />
+        <activity android:name=".GenerateReport"></activity>
     </application>
 
 </manifest>
