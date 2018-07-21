@@ -58,9 +58,7 @@ public class MakeOrder extends AppCompatActivity {
         pd.setMessage("Please Wait...");
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
-        pd.show();
         db = FirebaseFirestore.getInstance();
-        loadData();
         addItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +71,7 @@ public class MakeOrder extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (total != 0) {
+                    load=true;
                     Intent intent = new Intent(getApplicationContext(), MakePayment.class);
                     intent.putExtra("totalAmount", total);
                     intent.putExtra("orderID", orderID);
@@ -102,6 +101,7 @@ public class MakeOrder extends AppCompatActivity {
         orders = new ArrayList<>();
         menuItem = new Menu();
         orderedItemsID = new ArrayList<>();
+        pd.show();
         db.collection("PlacedOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -157,6 +157,8 @@ public class MakeOrder extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_CANCELED)
+            load=false;
         if (requestCode == ADD_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
             load = false;
             pd.show();
@@ -214,6 +216,7 @@ public class MakeOrder extends AppCompatActivity {
 
         } else if (requestCode == EDIT_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
             load = false;
+            pd.show();
             final Orders order = (Orders) data.getSerializableExtra("editedOrderItem");
             final boolean remove = data.getBooleanExtra("removeEditItem", false);
             db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -246,10 +249,10 @@ public class MakeOrder extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        pd.show();
-        if(load)
+    protected void onResume() {
+        super.onResume();
+        if(load) {
             loadData();
+        }
     }
 }
