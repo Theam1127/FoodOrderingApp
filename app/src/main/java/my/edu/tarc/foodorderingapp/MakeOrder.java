@@ -199,7 +199,7 @@ public class MakeOrder extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful())
-                                            Toast.makeText(getApplicationContext(), "Item removed.", Toast.LENGTH_SHORT);
+                                            Toast.makeText(getApplicationContext(), "Item removed.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
