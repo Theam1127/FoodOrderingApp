@@ -155,7 +155,7 @@
         <ListView
             android:id="@+id/orderListLV"
             android:layout_width="match_parent"
-            android:layout_height="414dp"
+            android:layout_height="424dp"
             android:layout_below="@+id/tvTitleQuantity"
             android:background="@drawable/list_view_border" />
 

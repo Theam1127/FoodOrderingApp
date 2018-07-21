@@ -108,7 +108,7 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                 if(etOrderQuantity.getText().toString().equals("0"))
                     Toast.makeText(getApplicationContext(), "Quantity should not be 0", Toast.LENGTH_SHORT).show();
                 else{
-                    if(menuItem!=null) {
+                    if(!menuItem.equals(null)) {
                         Orders order = new Orders(menuItem.getMenuID(), qty, total);
                         Intent intent = new Intent();
                         intent.putExtra("confirmOrder", order);
@@ -134,6 +134,13 @@ public class ConfirmAddOrderItem extends AppCompatActivity {
                 intent.putExtra("editedOrderItem", orderItem);
                 intent.putExtra("removeEditItem", true);
                 setResult(MakeOrder.EDIT_ORDER_ITEM,intent);
+                finish();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });

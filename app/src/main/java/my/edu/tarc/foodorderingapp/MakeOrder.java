@@ -43,6 +43,7 @@ public class MakeOrder extends AppCompatActivity {
     Orders o;
     double total;
     int nextID = 1;
+    boolean load = true;
     static final int ADD_ORDER_ITEM = 102, EDIT_ORDER_ITEM = 103;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,41 +112,43 @@ public class MakeOrder extends AppCompatActivity {
                         if(Integer.parseInt(documentSnapshot.getData().get("tableNumber").toString())==tableNumber && !(boolean)documentSnapshot.getData().get("paid"))
                             orderID = Integer.parseInt(documentSnapshot.getData().get("orderID").toString());
                     }
-                        db.collection("OrderDetail").orderBy("insertDate", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        if (Integer.parseInt(documentSnapshot.getData().get("orderID").toString()) == orderID) {
-                                            int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
-                                            int quantity = Integer.parseInt(documentSnapshot.getData().get("quantity").toString());
-                                            double total = Double.parseDouble(documentSnapshot.getData().get("subtotal").toString());
-                                            o = new Orders(menuID, quantity, total);
-                                            orders.add(o);
+                    if(orderID==0)
+                        orderID = nextID;
+                    db.collection("OrderDetail").orderBy("insertDate", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    if (Integer.parseInt(documentSnapshot.getData().get("orderID").toString()) == orderID) {
+                                        int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
+                                        int quantity = Integer.parseInt(documentSnapshot.getData().get("quantity").toString());
+                                        double total = Double.parseDouble(documentSnapshot.getData().get("subtotal").toString());
+                                        o = new Orders(menuID, quantity, total);
+                                        orders.add(o);
+                                    }
+                                }
+                                db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (Orders order : orders)
+                                                for (QueryDocumentSnapshot documentSnapshot : task.getResult())
+                                                    if (order.getMenuID() == Integer.parseInt(documentSnapshot.getData().get("menuID").toString()))
+                                                        menus.add(documentSnapshot.getData().get("menuName").toString());
+                                            adapter = new OrderListAdapter(menus, orders, getApplicationContext());
+                                            orderList.setAdapter(adapter);
+                                            totalPrice = findViewById(R.id.totalPriceTV);
+                                            total = 0.0;
+                                            for (int a = 0; a < orders.size(); a++)
+                                                total += orders.get(a).getTotal();
+                                            totalPrice.setText("RM " + String.format("%.2f", total));
+                                            pd.dismiss();
                                         }
                                     }
-                                    db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (Orders order : orders)
-                                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult())
-                                                        if (order.getMenuID() == Integer.parseInt(documentSnapshot.getData().get("menuID").toString()))
-                                                            menus.add(documentSnapshot.getData().get("menuName").toString());
-                                                adapter = new OrderListAdapter(menus, orders, getApplicationContext());
-                                                orderList.setAdapter(adapter);
-                                                totalPrice = findViewById(R.id.totalPriceTV);
-                                                total=0.0;
-                                                for (int a = 0; a < orders.size(); a++)
-                                                    total += orders.get(a).getTotal();
-                                                totalPrice.setText("RM " + String.format("%.2f", total));
-                                                pd.dismiss();
-                                            }
-                                        }
-                                    });
-                                }
+                                });
                             }
-                        });
+                        }
+                    });
                 }
             }
         });
@@ -154,90 +157,99 @@ public class MakeOrder extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == ADD_ORDER_ITEM) {
+        if (requestCode == ADD_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
+            load = false;
             pd.show();
             final Orders order = (Orders) data.getSerializableExtra("addOrder");
             Map<String, Object> placeOrder = new HashMap<>();
-            if (orderID == 0) {
-                orderID = nextID;
+            if (orderID == nextID) {
                 placeOrder.put("orderDate", FieldValue.serverTimestamp());
                 placeOrder.put("orderID", orderID);
                 placeOrder.put("paid", false);
                 placeOrder.put("tableNumber", tableNumber);
                 db.collection("PlacedOrder").add(placeOrder);
             }
-            db.collection("OrderDetail").whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    Map<String, Object> newOrder = new HashMap<>();
-                    if (task.getResult().isEmpty()) {
-                        newOrder.put("menuID", order.getMenuID());
-                        newOrder.put("orderID", orderID);
-                        newOrder.put("quantity", order.getQuantity());
-                        newOrder.put("subtotal", order.getTotal());
-                        newOrder.put("insertDate", FieldValue.serverTimestamp());
-                        db.collection("OrderDetail").add(newOrder).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
+                    if (task.isSuccessful()) {
+                        Map<String, Object> newOrder = new HashMap<>();
+                        if (task.getResult().isEmpty()) {
+                            newOrder.put("menuID", order.getMenuID());
+                            newOrder.put("orderID", orderID);
+                            newOrder.put("quantity", order.getQuantity());
+                            newOrder.put("subtotal", order.getTotal());
+                            newOrder.put("insertDate", FieldValue.serverTimestamp());
+                            db.collection("OrderDetail").add(newOrder).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    loadData();
+                                    Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            int quantity = 0;
+                            double total = 0;
+                            String docID = "";
+                            for (QueryDocumentSnapshot d : task.getResult()) {
+                                docID = d.getId();
+                                quantity = Integer.parseInt(d.getData().get("quantity").toString());
+                                total = Double.parseDouble(d.getData().get("subtotal").toString());
                             }
-                        });
-                    } else {
-                        int quantity = 0;
-                        double total = 0;
-                        String docID = "";
-                        for (QueryDocumentSnapshot d : task.getResult()) {
-                            docID = d.getId();
-                            quantity = Integer.parseInt(d.getData().get("quantity").toString());
-                            total = Double.parseDouble(d.getData().get("subtotal").toString());
-                        }
-                        newOrder.put("quantity", order.getQuantity() + quantity);
-                        newOrder.put("subtotal", order.getTotal() + total);
-                        db.collection("OrderDetail").document(docID).update(newOrder).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            newOrder.put("quantity", order.getQuantity() + quantity);
+                            newOrder.put("subtotal", order.getTotal() + total);
+                            db.collection("OrderDetail").document(docID).update(newOrder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    loadData();
+                                    Toast.makeText(getApplicationContext(), "Order Added.", Toast.LENGTH_SHORT).show();
 
+                                }
+                            });
+
+                        }
+                    }
+                }
+            });
+
+        } else if (requestCode == EDIT_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
+            load = false;
+            final Orders order = (Orders) data.getSerializableExtra("editedOrderItem");
+            final boolean remove = data.getBooleanExtra("removeEditItem", false);
+            db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        String docID = "";
+                        for (QueryDocumentSnapshot doc : task.getResult())
+                            docID = doc.getId();
+                        if (!remove) {
+                            Map<String, Object> editOrder = new HashMap<>();
+                            editOrder.put("quantity", order.getQuantity());
+                            editOrder.put("subtotal", order.getTotal());
+                            db.collection("OrderDetail").document(docID).update(editOrder);
+                        } else {
+                            db.collection("OrderDetail").document(docID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        loadData();
+                                        Toast.makeText(getApplicationContext(), "Item removed.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });
         }
-        else if(resultCode==EDIT_ORDER_ITEM){
-            final Orders order = (Orders)data.getSerializableExtra("editedOrderItem");
-            final boolean remove = data.getBooleanExtra("removeEditItem", false);
-            db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            String docID = "";
-                            for (QueryDocumentSnapshot doc : task.getResult())
-                                docID = doc.getId();
-                            if (!remove) {
-                                Map<String, Object> editOrder = new HashMap<>();
-                                editOrder.put("quantity", order.getQuantity());
-                                editOrder.put("subtotal", order.getTotal());
-                                db.collection("OrderDetail").document(docID).update(editOrder);
-                            } else {
-                                db.collection("OrderDetail").document(docID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful())
-                                            Toast.makeText(getApplicationContext(), "Item removed.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            }
-        }
+    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         pd.show();
-        loadData();
+        if(load)
+            loadData();
     }
 }

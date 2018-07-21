@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +31,9 @@ public class AddOrderItem extends AppCompatActivity {
     List<Menu> menu = new ArrayList<>();
     List<String> menuItems = new ArrayList<>();
     List<String> filterItems = new ArrayList<>();
+    List<Menu> filteredMenuList = new ArrayList<>();
+    List<String> filteredMenuName = new ArrayList<>();
+
     ArrayAdapter menuListAdapter, filterListAdapter;
     ProgressDialog pd;
     static final int ADD_ITEM_REQUEST = 101;
@@ -42,42 +47,98 @@ public class AddOrderItem extends AppCompatActivity {
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
         pd.show();
-        searchText = (EditText)findViewById(R.id.editTextSearch);
-        filterDropDown = (Spinner)findViewById(R.id.filterSpinner);
+        searchText = (EditText) findViewById(R.id.editTextSearch);
+        filterDropDown = (Spinner) findViewById(R.id.filterSpinner);
         menuList = (ListView) findViewById(R.id.menuList);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        filterItems.add("All");
         db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
-                    boolean available = (boolean)documentSnapshot.getData().get("menuStatus");
-                    String name = ""+documentSnapshot.getData().get("menuName");
-                    double price = Double.parseDouble(documentSnapshot.getData().get("menuPrice").toString());
-                    String type = ""+documentSnapshot.getData().get("menuType");
-                    Menu item = new Menu(menuID, name,type,available,price);
-                    menu.add(item);
-                    menuItems.add(name);
-                    if(!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))
-                        filterItems.add(documentSnapshot.getData().get("menuType").toString());
-                }
-                menuListAdapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,menuItems);
-                menuList.setAdapter(menuListAdapter);
-                filterListAdapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_dropdown_item_1line,filterItems);
-                filterDropDown.setAdapter(filterListAdapter);
-                pd.dismiss();
-
-                menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(getApplicationContext(),ConfirmAddOrderItem.class);
-                        intent.putExtra("menuItem", menu.get(i));
-                        startActivityForResult(intent, ADD_ITEM_REQUEST);
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        int menuID = Integer.parseInt(documentSnapshot.getData().get("menuID").toString());
+                        boolean available = (boolean) documentSnapshot.getData().get("menuStatus");
+                        String name = "" + documentSnapshot.getData().get("menuName");
+                        double price = Double.parseDouble(documentSnapshot.getData().get("menuPrice").toString());
+                        String type = "" + documentSnapshot.getData().get("menuType");
+                        Menu item = new Menu(menuID, name, type, available, price);
+                        menu.add(item);
+                        menuItems.add(name);
+                        if (!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))
+                            filterItems.add(documentSnapshot.getData().get("menuType").toString());
                     }
-                });
-            }
-        });
+                    filteredMenuName = menuItems;
+                    filteredMenuList = menu;
+                    menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                    menuList.setAdapter(menuListAdapter);
+                    filterListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, filterItems);
+                    filterDropDown.setAdapter(filterListAdapter);
+                    pd.dismiss();
 
+                    searchText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            filteredMenuName = new ArrayList<>();
+                            filteredMenuList = new ArrayList<>();
+                            for (Menu item : menu) {
+                                if (item.getName().toLowerCase().contains(charSequence)) {
+                                    filteredMenuList.add(item);
+                                    filteredMenuName.add(item.getName());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                            menuList.setAdapter(menuListAdapter);
+                        }
+                    });
+
+                    filterDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            filteredMenuName = new ArrayList<>();
+                            filteredMenuList = new ArrayList<>();
+                            if (i != 0) {
+                                for (Menu item : menu) {
+                                    if (item.getType().equals(adapterView.getSelectedItem().toString())) {
+                                        filteredMenuList.add(item);
+                                        filteredMenuName.add(item.getName());
+                                    }
+                                }
+                            } else {
+                                filteredMenuList = menu;
+                                filteredMenuName = menuItems;
+                            }
+                            menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                            menuList.setAdapter(menuListAdapter);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+
+                    });
+
+
+                    menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(getApplicationContext(), ConfirmAddOrderItem.class);
+                            intent.putExtra("menuItem", filteredMenuList.get(i));
+                            startActivityForResult(intent, ADD_ITEM_REQUEST);
+                        }
+                    });
+                }
+            }});
 
     }
 
