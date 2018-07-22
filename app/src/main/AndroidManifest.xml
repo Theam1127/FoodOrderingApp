@@ -25,11 +25,13 @@
         <activity
             android:name=".AddOrderItem"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ConfirmAddOrderItem"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".GenerateReport"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ConfirmAddOrderItem"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".GenerateReport"
+            android:screenOrientation="portrait" />
+        <activity android:name=".RestaurantTables"></activity>
     </application>
 
 </manifest>
