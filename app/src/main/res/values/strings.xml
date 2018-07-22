@@ -28,4 +28,9 @@
     <string name="pay">Pay</string>
     <string name="back">Back</string>
     <string name="rm">RM</string>
+    <string name="select_report_type">Select report type:</string>
+    <string-array name="report_type">
+        <item>Monthly Sales</item>
+        <item>Popular Menu</item>
+    </string-array>
 </resources>
