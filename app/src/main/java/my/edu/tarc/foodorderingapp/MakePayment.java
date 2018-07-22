@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -65,7 +66,6 @@ public class MakePayment extends AppCompatActivity {
                         btnBack.setBackgroundColor(0);
                         db = FirebaseFirestore.getInstance();
                         nextID = 1;
-
                         db.collection("Payment").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -83,24 +83,28 @@ public class MakePayment extends AppCompatActivity {
                                     db.collection("Payment").add(newPayment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentReference> task) {
-                                            db.collection("PlacedOrder").whereEqualTo("orderID", orderID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    String id = "";
-                                                    Map<String,Object> update = new HashMap<>();
-                                                    if(task.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot doc : task.getResult())
-                                                            id = doc.getId();
-                                                        update.put("paid", true);
-                                                        db.collection("PlacedOrder").document(id).update(update);
-                                                        tvStatus.setText("Paid!");
-                                                        btnBack.setClickable(true);
-                                                        btnBack.setBackgroundColor(Color.LTGRAY);
-
+                                            if(task.isSuccessful()) {
+                                                db.collection("PlacedOrder").whereEqualTo("orderID", orderID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        String id = "";
+                                                        Map<String, Object> update = new HashMap<>();
+                                                        if (task.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot doc : task.getResult())
+                                                                id = doc.getId();
+                                                            update.put("paid", true);
+                                                            db.collection("PlacedOrder").document(id).update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    tvStatus.setText("Paid!");
+                                                                    btnBack.setClickable(true);
+                                                                    btnBack.setBackgroundColor(Color.LTGRAY);
+                                                                }
+                                                            });
+                                                        }
                                                     }
-
-                                                }
-                                            });
+                                                });
+                                            }
                                         }
                                     });
 
