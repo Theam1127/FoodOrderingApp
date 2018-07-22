@@ -57,94 +57,98 @@ public class AddOrderItem extends AppCompatActivity {
         menuList = (ListView) findViewById(R.id.menuList);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         filterItems.add("All");
-        db.collection("Menu").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                menu.clear();
-                menuItems.clear();
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    int menuID = Integer.parseInt(documentSnapshot.get("menuID").toString());
-                    boolean available = documentSnapshot.getBoolean("menuStatus");
-                    String name = documentSnapshot.getString("menuName");
-                    double price = documentSnapshot.getDouble("menuPrice");
-                    String type = documentSnapshot.getString("menuType");
-                    Menu item = new Menu(menuID, name, type, available, price);
-                    menu.add(item);
-                    menuItems.add(name);
-                    if (!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))
-                        filterItems.add(documentSnapshot.getData().get("menuType").toString());
-                }
-                filteredMenuName = menuItems;
-                filteredMenuList = menu;
-                menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
-                menuList.setAdapter(menuListAdapter);
-                filterListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, filterItems);
-                filterDropDown.setAdapter(filterListAdapter);
-                pd.dismiss();
-
-                searchText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    menu.clear();
+                    menuItems.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        int menuID = Integer.parseInt(documentSnapshot.get("menuID").toString());
+                        boolean available = Boolean.parseBoolean(documentSnapshot.getData().get("menuStatus").toString());
+                        String name = documentSnapshot.getString("menuName");
+                        double price = documentSnapshot.getDouble("menuPrice");
+                        String type = documentSnapshot.getString("menuType");
+                        Menu item = new Menu(menuID, name, type, available, price);
+                        menu.add(item);
+                        menuItems.add(name);
+                        if (!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))
+                            filterItems.add(documentSnapshot.getData().get("menuType").toString());
                     }
+                    filteredMenuName = menuItems;
+                    filteredMenuList = menu;
+                    menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                    menuList.setAdapter(menuListAdapter);
+                    filterListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, filterItems);
+                    filterDropDown.setAdapter(filterListAdapter);
+                    pd.dismiss();
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        filteredMenuName = new ArrayList<>();
-                        filteredMenuList = new ArrayList<>();
-                        for (Menu item : menu) {
-                            if (item.getName().toLowerCase().contains(charSequence)) {
-                                filteredMenuList.add(item);
-                                filteredMenuName.add(item.getName());
-                            }
+                    searchText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                         }
-                    }
 
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
-                        menuList.setAdapter(menuListAdapter);
-                    }
-                });
-
-                filterDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        filteredMenuName = new ArrayList<>();
-                        filteredMenuList = new ArrayList<>();
-                        if (i != 0) {
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            filteredMenuName = new ArrayList<>();
+                            filteredMenuList = new ArrayList<>();
                             for (Menu item : menu) {
-                                if (item.getType().equals(adapterView.getSelectedItem().toString())) {
+                                if (item.getName().toLowerCase().contains(charSequence)) {
                                     filteredMenuList.add(item);
                                     filteredMenuName.add(item.getName());
                                 }
                             }
-                        } else {
-                            filteredMenuList = menu;
-                            filteredMenuName = menuItems;
                         }
-                        menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
-                        menuList.setAdapter(menuListAdapter);
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                            menuList.setAdapter(menuListAdapter);
+                        }
+                    });
 
-                    }
+                    filterDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            filteredMenuName = new ArrayList<>();
+                            filteredMenuList = new ArrayList<>();
+                            if (i != 0) {
+                                for (Menu item : menu) {
+                                    if (item.getType().equals(adapterView.getSelectedItem().toString())) {
+                                        filteredMenuList.add(item);
+                                        filteredMenuName.add(item.getName());
+                                    }
+                                }
+                            } else {
+                                filteredMenuList = menu;
+                                filteredMenuName = menuItems;
+                            }
+                            menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                            menuList.setAdapter(menuListAdapter);
+                        }
 
-                });
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+
+                    });
 
 
-                menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(getApplicationContext(), ConfirmAddOrderItem.class);
-                        intent.putExtra("menuItem", filteredMenuList.get(i));
-                        startActivityForResult(intent, ADD_ITEM_REQUEST);
-                    }
-                });
+                    menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(getApplicationContext(), ConfirmAddOrderItem.class);
+                            intent.putExtra("menuItem", filteredMenuList.get(i));
+                            startActivityForResult(intent, ADD_ITEM_REQUEST);
+                        }
+                    });
+                }
+
             }
         });
+
 
 }
 

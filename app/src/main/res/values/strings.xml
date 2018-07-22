@@ -34,4 +34,5 @@
         <item>Popular Menu</item>
     </string-array>
     <string name="table">Tables:</string>
+    <string name="clear_orders">Clear Orders</string>
 </resources>

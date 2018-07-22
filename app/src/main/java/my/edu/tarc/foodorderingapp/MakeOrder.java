@@ -1,6 +1,8 @@
 package my.edu.tarc.foodorderingapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,7 +43,7 @@ public class MakeOrder extends AppCompatActivity {
     OrderListAdapter adapter;
     ProgressDialog pd;
     int tableNumber, orderID;
-    Button addItemBtn, makePaymentBtn;
+    Button addItemBtn, makePaymentBtn, clearOrder;
     FirebaseFirestore db;
     List<Orders> orders;
     Orders o;
@@ -93,6 +95,46 @@ public class MakeOrder extends AppCompatActivity {
                 intent.putExtra("editOrderedItem", orders.get(i));
                 intent.putExtra("editOrderItemName", menus.get(i));
                 startActivityForResult(intent, EDIT_ORDER_ITEM);
+            }
+        });
+        clearOrder = findViewById(R.id.btnClear);
+        clearOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(MakeOrder.this);
+                if(!orders.isEmpty()) {
+                    alert.setTitle("Are you sure?").setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            db.collection("OrderDetail").whereEqualTo("orderID", orderID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                            db.collection("OrderDetail").document(documentSnapshot.getId()).delete();
+                                        }
+                                        db.collection("PlacedOrder").whereEqualTo("orderID", orderID).whereEqualTo("paid", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful())
+                                                    for (QueryDocumentSnapshot doc : task.getResult())
+                                                        db.collection("PlacedOrder").document(doc.getId()).delete();
+                                                finish();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
     }
@@ -167,12 +209,12 @@ public class MakeOrder extends AppCompatActivity {
             pd.show();
             final Orders order = (Orders) data.getSerializableExtra("addOrder");
             if (orderID == 0) {
-                db.collection("PlacedOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                db.collection("PlacedOrder").orderBy("orderID", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot doc : task.getResult())
-                                nextID++;
+                                nextID+=Integer.parseInt(doc.get("orderID").toString());
                             orderID = nextID;
                             Map<String, Object> placeOrder = new HashMap<>();
                             placeOrder.put("orderDate", FieldValue.serverTimestamp());
@@ -253,5 +295,21 @@ public class MakeOrder extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(orders.isEmpty() && orderID!=0)
+            db.collection("PlacedOrder").whereEqualTo("orderID", orderID).whereEqualTo("paid", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful())
+                        for(QueryDocumentSnapshot doc : task.getResult())
+                            db.collection("PlacedOrder").document(doc.getId()).delete();
+                    finish();
+                }
+            });
+        else
+            super.onBackPressed();
     }
 }
