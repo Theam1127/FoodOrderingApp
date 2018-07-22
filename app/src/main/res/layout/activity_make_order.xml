@@ -24,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="270dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="270dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +155,7 @@
         <ListView
             android:id="@+id/orderListLV"
             android:layout_width="match_parent"
-            android:layout_height="414dp"
+            android:layout_height="424dp"
             android:layout_below="@+id/tvTitleQuantity"
             android:background="@drawable/list_view_border" />
 
