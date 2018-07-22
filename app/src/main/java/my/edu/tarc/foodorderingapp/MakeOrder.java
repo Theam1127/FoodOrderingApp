@@ -57,8 +57,8 @@ public class MakeOrder extends AppCompatActivity {
         makePaymentBtn = (Button) findViewById(R.id.makePaymentBtn);
         tableNo = (TextView) findViewById(R.id.tableNo);
         orderList = (ListView) findViewById(R.id.orderListLV);
-        tableNumber = 1;
-        pd = new ProgressDialog(this);
+        tableNumber = getIntent().getIntExtra("table", 0);
+        pd = new ProgressDialog(MakeOrder.this);
         pd.setMessage("Please Wait...");
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
@@ -110,7 +110,6 @@ public class MakeOrder extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 orderID = 0;
-                pd.show();
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     if (Integer.parseInt(documentSnapshot.get("tableNumber").toString()) == tableNumber && !documentSnapshot.getBoolean("paid"))
                         orderID = Integer.parseInt(documentSnapshot.get("orderID").toString());
@@ -119,7 +118,6 @@ public class MakeOrder extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         orders.clear();
-                        pd.show();
                         for (DocumentSnapshot doc : queryDocumentSnapshots) {
                             if (orderID == Integer.parseInt(doc.get("orderID").toString())) {
                                 int menuID = Integer.parseInt(doc.getData().get("menuID").toString());
