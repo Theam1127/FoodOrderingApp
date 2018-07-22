@@ -33,4 +33,5 @@
         <item>Monthly Sales</item>
         <item>Popular Menu</item>
     </string-array>
+    <string name="table">Tables:</string>
 </resources>
