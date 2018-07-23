@@ -35,4 +35,15 @@
     </string-array>
     <string name="table">Tables:</string>
     <string name="clear_orders">Clear Orders</string>
+
+    <string name="grand_total">Grand Total: </string>
+    <string name="order_id">Order ID: </string>
+    <string name="payment_date">Payment Date: </string>
+    <string name="payment_id">Payment ID: </string>
+    <string name="staff_id">Staff ID: </string>
+    <string name="payment_time">Payment Time: </string>
+    <string name="make_order">Make Order</string>
+    <string name="view_payment">View Payment History</string>
+
+
 </resources>

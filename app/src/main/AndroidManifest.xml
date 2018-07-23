@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RestaurantTables"
+            android:name=".HomePage"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -19,26 +19,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MakePayment"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ForgotPassword"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ChangePassword"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MaintenanceSetting"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MakePayment"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintenanceSetting"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AddOrderItem"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".ConfirmAddOrderItem"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GenerateReport"
             android:screenOrientation="portrait" />
-        <activity android:name=".MakeOrder"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".MakeOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RestaurantTables"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PaymentHistory"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PaymentHistoryDetail"
+            android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>
