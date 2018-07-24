@@ -44,6 +44,8 @@
     <string name="payment_time">Payment Time: </string>
     <string name="make_order">Make Order</string>
     <string name="view_payment">View Payment History</string>
-
+    <string name="start_date">Start date :</string>
+    <string name="end_date">End date :</string>
+    <string name="nulltext">Null</string>
 
 </resources>
