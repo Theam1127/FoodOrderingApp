@@ -10,6 +10,7 @@ public class HomePage extends AppCompatActivity {
 
     private Button btnOrder;
     private Button btnPayHis;
+    private Button btnGenerateReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,7 @@ public class HomePage extends AppCompatActivity {
 
         btnOrder = (Button)findViewById(R.id.btnOrder);
         btnPayHis = (Button)findViewById(R.id.btnPayHis);
+        btnGenerateReport = (Button)findViewById(R.id.btnGenerateReport);
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +34,13 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentPayHis = new Intent(HomePage.this,PaymentHistory.class);
                 startActivity(intentPayHis);
+            }
+        });
+        btnGenerateReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentReport = new Intent(HomePage.this,GenerateReport.class);
+                startActivity(intentReport);
             }
         });
 

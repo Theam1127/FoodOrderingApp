@@ -1,6 +1,10 @@
 package my.edu.tarc.foodorderingapp;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,39 +26,117 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class GenerateReport extends AppCompatActivity {
 
+    int day_calendar1 = 0;
+    int day_calendar2 = 0;
+    int month_calendar1 = 0;
+    int month_calendar2 = 0;
+    int year_calendar1 = 0;
+    int year_calendar2 = 0;
+
+    String startDate = null;
+    String endDate = null;
     ListView menuListView;
     Spinner reportTypeSpinner;
     popularMenuListAdapter adapter;
+    ProgressDialog pd;
+    TextView startDateTV, endDateTV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_report);
 
-
-        //get  menu database
-        //read menuid and name into array
-        //sort according to menuidfire
-        //in orderdetail get menu name based on menuID through array
-
+        startDateTV = (TextView) findViewById(R.id.startDate2TV);
+        endDateTV = (TextView) findViewById(R.id.endDate2TV);
         menuListView = (ListView) findViewById(R.id.reportLV);
         reportTypeSpinner = (Spinner)findViewById(R.id.reportTypeSpinner);
+
+        startDateTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                if(day_calendar1 == 0 && month_calendar1 == 0 && year_calendar1 == 0) {
+                    day_calendar1 = calendar.get(Calendar.DAY_OF_MONTH);
+                    month_calendar1 = calendar.get(Calendar.MONTH);
+                    year_calendar1 = calendar.get(Calendar.YEAR);
+                }
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GenerateReport.this, new DatePickerDialog.OnDateSetListener(){
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        day_calendar1 = day;
+                        month_calendar1 = month;
+                        year_calendar1 = year;
+
+                        int month1 = month + 1;
+
+                        startDate = day + "/" + month1 + "/" + year;
+                        startDateTV.setText(startDate);
+                        verifyInput();
+                    }
+                }, year_calendar1, month_calendar1, day_calendar1);
+                datePickerDialog.show();
+            }
+        });
+
+        endDateTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                if(day_calendar2 == 0 && month_calendar2 == 0 && year_calendar2 == 0) {
+                    day_calendar2 = calendar.get(Calendar.DAY_OF_MONTH);
+                    month_calendar2 = calendar.get(Calendar.MONTH);
+                    year_calendar2 = calendar.get(Calendar.YEAR);
+                }
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GenerateReport.this, new DatePickerDialog.OnDateSetListener(){
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        day_calendar2 = day;
+                        month_calendar2 = month;
+                        year_calendar2 = year;
+
+                        int month1 = month + 1;
+
+                        endDate = day + "/" + month1 + "/" + year;
+                        endDateTV.setText(endDate);
+                        verifyInput();
+                    }
+                }, year_calendar2, month_calendar2, day_calendar2);
+                datePickerDialog.show();
+            }
+        });
+
+
+        pd = new ProgressDialog(GenerateReport.this);
+        pd.setMessage("Please Wait...");
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
 
         reportTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 String reportType = reportTypeSpinner.getItemAtPosition(pos).toString();
-                if(reportType=="Monthly Sales")
+                if(reportType.equals("Monthly Sales")) {
                     getMonthlySales();
-                else if(reportType=="Popular Menu")
-                    getPopularMenu();
+                }
+                else if(reportType.equals("Popular Menu")) {
+                    verifyInput();
+
+                }
             }
 
             @Override
@@ -63,16 +148,87 @@ public class GenerateReport extends AppCompatActivity {
 
     }
 
-    public void getPopularMenu(){
+    public void verifyInput(){
+
+        if(startDate != null && endDate != null && reportTypeSpinner.getSelectedItem().toString().equals("Popular Menu")) {
+
+            Date newStartDateFormat = null;
+            Date newEndDateFormat = null;
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+            try {
+                Date startdate = df.parse(startDate);
+                newStartDateFormat = startdate;
+                Date enddate = df.parse(endDate);
+                newEndDateFormat = enddate;
+
+            } catch (ParseException ex) {
+
+            }
+
+            if(newStartDateFormat.after(newEndDateFormat)) {
+                Toast.makeText(getApplicationContext(), "Start date must be before or on the same day as end date.", Toast.LENGTH_LONG).show();
+                menuListView.setAdapter(null);
+            }
+            else{
+                pd.show();
+                getPopularMenu_task1(newStartDateFormat,newEndDateFormat);
+            }
+        }
+        //Toast.makeText(getApplicationContext(), newStartDateFormat + " and" + newEndDateFormat, Toast.LENGTH_LONG).show();
+
+    }
+
+    public void getPopularMenu_task1(final Date startDate, final Date endDate){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final ArrayList<menu> existingMenu = new ArrayList<menu>();
+        final ArrayList<menuItems> menuList = new ArrayList<menuItems>();
 
-
-        db.collection("OrderDetail").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot document : task.getResult()){
+
+                        int tempMenuID = Integer.parseInt(document.getData().get("menuID").toString());
+                        String tempMenuName = document.getData().get("menuName").toString();
+
+                        menuItems newmenu = new menuItems(tempMenuID, tempMenuName);
+                        menuList.add(newmenu);
+                    }
+                }
+                //Bubble Sort
+                boolean swapped = true;
+                while(swapped){
+                    swapped = false;
+                    for(int i = 1; i > menuList.size(); i ++){
+                        menuItems temp = null;
+                        if(menuList.get(i-1).getMenuID() < menuList.get(i).getMenuID()){   //if everyting is sorted, swapped remain false because
+                            temp = menuList.get(i-1);                                              //the if statements cannot be entered,
+                            menuList.set(i-1, menuList.get(i));                                //then swapped = true cannot be executed, hence exit loop
+                            menuList.set(i, temp);
+                            swapped = true;
+                        }
+                    }
+                }
+                getPopularMenu_task2(menuList, startDate, endDate);
+            }
+        });
+    }
+
+
+    public void getPopularMenu_task2(final ArrayList<menuItems> menuList, Date startDate, Date endDate){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final ArrayList<menu> existingMenu = new ArrayList<menu>();
+
+
+        db.collection("OrderDetail").whereGreaterThanOrEqualTo("insertDate", startDate).whereLessThanOrEqualTo("insertDate", endDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot document : task.getResult()){
+
+                        //Date date = (Date) document.getData().get("insertDate");
+                        //String date = document.getData().get("insertDate").toString();
 
                         int tempMenuID = Integer.parseInt(document.getData().get("menuID").toString());
                         int tempQuantity = Integer.parseInt(document.getData().get("quantity").toString());
@@ -113,8 +269,9 @@ public class GenerateReport extends AppCompatActivity {
                         }
                     }
 
-                    adapter = new popularMenuListAdapter(existingMenu, getApplicationContext());
+                    adapter = new popularMenuListAdapter(existingMenu, menuList, getApplicationContext());
                     menuListView.setAdapter(adapter);
+                    pd.dismiss();
                 }
             }
         });
@@ -125,11 +282,14 @@ public class GenerateReport extends AppCompatActivity {
     }
 
     public class popularMenuListAdapter extends BaseAdapter {
-        private List<menu> menu;
+        private ArrayList<menu> menu;
+        private ArrayList<menuItems> menuItems;
         private Context context;
 
-        public popularMenuListAdapter(List<GenerateReport.menu> menu, Context context) {
+
+        public popularMenuListAdapter(ArrayList<GenerateReport.menu> menu, ArrayList<GenerateReport.menuItems> menuItems, Context context) {
             this.menu = menu;
+            this.menuItems = menuItems;
             this.context = context;
         }
 
@@ -160,10 +320,16 @@ public class GenerateReport extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view1 = inflater.inflate(R.layout.popular_menu_list_view,null);
             }
+            //Toast.makeText(getApplicationContext(), menu.get(pos).getMenuID() + ": " + menu.get(pos).getQuantity(), Toast.LENGTH_LONG).show();
             TextView menuNameTV = (TextView)view1.findViewById(R.id.menuNameTV);
             TextView menuQuantityTV = (TextView)view1.findViewById(R.id.menuQuantityTV);
-            menuNameTV.setText(menu.get(pos).getMenuID());
-            menuQuantityTV.setText(menu.get(pos).getQuantity());
+            String menuName = "<Deleted>";
+            for(int i=0; i < menuItems.size(); i++){
+                if (menu.get(pos).getMenuID() == menuItems.get(i).getMenuID())
+                    menuName = menuItems.get(i).getName();
+            }
+            menuNameTV.setText(menuName );
+            menuQuantityTV.setText(Integer.toString(menu.get(pos).getQuantity()));
             return view1;
         }
     }
@@ -195,5 +361,30 @@ public class GenerateReport extends AppCompatActivity {
         }
     }
 
+    public class menuItems{
+        private int menuID;
+        private String name;
+
+        public menuItems(int menuID, String name) {
+            this.menuID = menuID;
+            this.name = name;
+        }
+
+        public int getMenuID() {
+            return menuID;
+        }
+
+        public void setMenuID(int menuID) {
+            this.menuID = menuID;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 
 }

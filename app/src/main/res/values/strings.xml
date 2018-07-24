@@ -47,5 +47,7 @@
     <string name="start_date">Start date :</string>
     <string name="end_date">End date :</string>
     <string name="nulltext">Null</string>
+    <string name="generate_report">Generate Report</string>
+    <string name="tao_to_select">Tap to select</string>
 
 </resources>

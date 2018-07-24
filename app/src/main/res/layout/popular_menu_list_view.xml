@@ -9,15 +9,17 @@
     <TextView
         android:id="@+id/menuNameTV"
         android:layout_width="221dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_weight="1"
-        android:text="null" />
+        android:text="@string/nulltext"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/menuQuantityTV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_weight="1"
-        android:text="null" />
+        android:text="@string/nulltext"
+        android:textSize="18sp" />
 
 </LinearLayout>
