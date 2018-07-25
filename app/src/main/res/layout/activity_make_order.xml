@@ -23,14 +23,14 @@
         android:id="@+id/tableNo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="270dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="270dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toStartOf="@+id/btnClear"
+        app:layout_constraintHorizontal_bias="0.077"
         app:layout_constraintStart_toEndOf="@+id/tableNoTV"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -155,10 +155,24 @@
         <ListView
             android:id="@+id/orderListLV"
             android:layout_width="match_parent"
-            android:layout_height="414dp"
+            android:layout_height="424dp"
             android:layout_below="@+id/tvTitleQuantity"
             android:background="@drawable/list_view_border" />
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_red_dark"
+        android:text="@string/clear_orders"
+        android:textColor="?attr/colorBackgroundFloating"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -12,7 +12,7 @@
     <string name="orderItems">Ordered Items: </string>
     <string name="add_item">Add Item</string>
     <string name="make_payment">Make Payment</string>
-    <string name="total_price">Total Price: </string>
+    <string name="total_amount">Total Amount: </string>
     <string name="Item_name">Item Name</string>
     <string name="quantity">Quantity</string>
     <string name="total">Total</string>
@@ -21,9 +21,33 @@
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="cancel">Cancel</string>
-    <string-array name="test">
-        <item>asfasd</item>
-        <item>afsadfsadwq</item>
-        <item>asdfeeefdewf</item>
+    <string name="confirm">Confirm</string>
+    <string name="remove_item">Remove Item</string>
+    <string name="amount_paid">Amount Paid: </string>
+    <string name="changes">Changes:</string>
+    <string name="pay">Pay</string>
+    <string name="back">Back</string>
+    <string name="rm">RM</string>
+    <string name="select_report_type">Select report type:</string>
+    <string-array name="report_type">
+        <item>Monthly Sales</item>
+        <item>Popular Menu</item>
     </string-array>
+    <string name="table">Tables:</string>
+    <string name="clear_orders">Clear Orders</string>
+
+    <string name="grand_total">Grand Total: </string>
+    <string name="order_id">Order ID: </string>
+    <string name="payment_date">Payment Date: </string>
+    <string name="payment_id">Payment ID: </string>
+    <string name="staff_id">Staff ID: </string>
+    <string name="payment_time">Payment Time: </string>
+    <string name="make_order">Make Order</string>
+    <string name="view_payment">View Payment History</string>
+    <string name="start_date">Start date :</string>
+    <string name="end_date">End date :</string>
+    <string name="nulltext">Null</string>
+    <string name="generate_report">Generate Report</string>
+    <string name="tao_to_select">Tap to select</string>
+
 </resources>

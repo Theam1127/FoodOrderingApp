@@ -10,24 +10,51 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UpdateMenuActivity"
-            android:label="@string/app_name">
+            android:name=".HomePage"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Payment" />
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".ChangePassword" />
-        <activity android:name=".MaintenanceSetting" />
+        <activity
+            android:name=".MakePayment"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintenanceSetting"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AddOrderItem"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ConfirmAddOrderItem" />
-        <activity android:name=".MakeOrder" />
-        <activity android:name=".AddMenuActivity"></activity>
+        <activity
+            android:name=".ConfirmAddOrderItem"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GenerateReport"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MakeOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RestaurantTables"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PaymentHistory"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PaymentHistoryDetail"
+            android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>
