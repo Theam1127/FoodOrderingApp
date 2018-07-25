@@ -53,6 +53,9 @@
         <activity
             android:name=".PaymentHistoryDetail"
             android:screenOrientation="portrait"/>
+        <activity android:name=".AddMenuActivity"/>
+        <activity android:name=".UpdateMenuActivity"/>
+        <activity android:name=".AddStaffActivity"/>
 
 
     </application>

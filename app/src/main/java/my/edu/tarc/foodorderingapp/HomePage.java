@@ -11,6 +11,7 @@ public class HomePage extends AppCompatActivity {
     private Button btnOrder;
     private Button btnPayHis;
     private Button btnGenerateReport;
+    private Button buttonUpdateMenu, buttonAddMenu, buttonAddStaff, buttonUpdateStaff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,10 @@ public class HomePage extends AppCompatActivity {
         btnOrder = (Button)findViewById(R.id.btnOrder);
         btnPayHis = (Button)findViewById(R.id.btnPayHis);
         btnGenerateReport = (Button)findViewById(R.id.btnGenerateReport);
+        buttonAddMenu = (Button)findViewById(R.id.buttonAddMenu);
+        buttonUpdateMenu = (Button)findViewById(R.id.buttonUpdateMenu);
+        buttonAddStaff = (Button)findViewById(R.id.buttonAddStaff);
+        buttonUpdateStaff = (Button)findViewById(R.id.buttonUpdateStaff);
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +46,34 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentReport = new Intent(HomePage.this,GenerateReport.class);
                 startActivity(intentReport);
+            }
+        });
+        buttonAddMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentAddMenu = new Intent(HomePage.this, AddMenuActivity.class);
+                startActivity(intentAddMenu);
+            }
+        });
+        buttonUpdateMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentUpdateMenu = new Intent(HomePage.this, UpdateMenuActivity.class);
+                startActivity(intentUpdateMenu);
+            }
+        });
+        buttonAddStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentAddStaff = new Intent(HomePage.this, AddStaffActivity.class);
+                startActivity(intentAddStaff);
+            }
+        });
+        buttonUpdateStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intentUpdateStaff = new Intent(HomePage.this, AddMenuActivity.class);
+                //startActivity(intentAddMenu);
             }
         });
 

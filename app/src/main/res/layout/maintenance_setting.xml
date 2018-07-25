@@ -22,8 +22,9 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabRippleColor="@color/common_google_signin_btn_text_dark_default"></android.support.design.widget.TabLayout>
+            app:tabIndicatorColor="@color/colorAccent">
+
+        </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
 
