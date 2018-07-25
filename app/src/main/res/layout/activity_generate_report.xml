@@ -22,13 +22,10 @@
         android:id="@+id/reportTypeSpinner"
         android:layout_width="175dp"
         android:layout_height="27dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="160dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="160dp"
         android:layout_marginTop="26dp"
         android:entries="@array/report_type"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,13 +98,10 @@
         android:id="@+id/endDate2TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="304dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="304dp"
         android:layout_marginTop="88dp"
         android:text="@string/tao_to_select"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
