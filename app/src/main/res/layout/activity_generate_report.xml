@@ -36,7 +36,7 @@
     <ListView
         android:id="@+id/reportLV"
         android:layout_width="354dp"
-        android:layout_height="412dp"
+        android:layout_height="344dp"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,11 +68,12 @@
 
     <TextView
         android:id="@+id/col1TV"
-        android:layout_width="221dp"
-        android:layout_height="wrap_content"
+        android:layout_width="220dp"
+        android:layout_height="35dp"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/reportLV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/foodTypeSpinner"
@@ -80,9 +81,14 @@
 
     <TextView
         android:id="@+id/col2TV"
-        android:layout_width="133dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="63dp"
+        android:layout_width="134dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="92dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/col1TV"
         app:layout_constraintTop_toBottomOf="@+id/endDate2TV" />
 
@@ -115,7 +121,7 @@
     <TextView
         android:id="@+id/typeTV"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="27dp"

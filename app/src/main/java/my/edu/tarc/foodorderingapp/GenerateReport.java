@@ -53,7 +53,7 @@ public class GenerateReport extends AppCompatActivity {
     Spinner reportTypeSpinner, foodTypeSpinner;
     popularMenuListAdapter adapter;
     ProgressDialog pd;
-    TextView startDateTV, endDateTV;
+    TextView startDateTV, endDateTV, col1TV, col2TV;
 
 
     @Override
@@ -63,6 +63,8 @@ public class GenerateReport extends AppCompatActivity {
 
         startDateTV = (TextView) findViewById(R.id.startDate2TV);
         endDateTV = (TextView) findViewById(R.id.endDate2TV);
+        col1TV = (TextView)findViewById(R.id.col1TV);
+        col2TV = (TextView)findViewById(R.id.col2TV);
         menuListView = (ListView) findViewById(R.id.reportLV);
         reportTypeSpinner = (Spinner)findViewById(R.id.reportTypeSpinner);
         foodTypeSpinner = (Spinner)findViewById(R.id.foodTypeSpinner);
@@ -131,7 +133,7 @@ public class GenerateReport extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 String reportType = reportTypeSpinner.getItemAtPosition(pos).toString();
                 if(reportType.equals("Monthly Sales")) {
-                    getMonthlySales();
+                    verifyInput();
                 }
                 else if(reportType.equals("Popular Menu")) {
                     verifyInput();
@@ -162,7 +164,7 @@ public class GenerateReport extends AppCompatActivity {
 
     public void verifyInput(){
 
-        if(startDate != null && endDate != null && reportTypeSpinner.getSelectedItem().toString().equals("Popular Menu")) {
+        if(startDate != null && endDate != null) {
 
             Date newStartDateFormat = null;
             Date newEndDateFormat = null;
@@ -181,17 +183,22 @@ public class GenerateReport extends AppCompatActivity {
             if(newStartDateFormat.after(newEndDateFormat)) {
                 Toast.makeText(getApplicationContext(), "Start date must be before or on the same day as end date.", Toast.LENGTH_LONG).show();
                 menuListView.setAdapter(null);
+                col1TV.setText("");
+                col1TV.setText("");
             }
             else{
                 pd.show();
-                getPopularMenu_task1(newStartDateFormat,newEndDateFormat);
+                String reportType = reportTypeSpinner.getSelectedItem().toString();
+                getMenuList(newStartDateFormat,newEndDateFormat, reportType);
+
+
             }
         }
-        //Toast.makeText(getApplicationContext(), newStartDateFormat + " and" + newEndDateFormat, Toast.LENGTH_LONG).show();
+
 
     }
 
-    public void getPopularMenu_task1(final Date startDate, final Date endDate){
+    public void getMenuList(final Date startDate, final Date endDate, final String reportType){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final ArrayList<Menu> menuList = new ArrayList<Menu>();
 
@@ -226,13 +233,13 @@ public class GenerateReport extends AppCompatActivity {
                         }
                     }
                 }
-                getPopularMenu_task2(menuList, startDate, endDate);
+                    getPopularMenu(menuList, startDate, endDate, reportType);
             }
         });
     }
 
 
-    public void getPopularMenu_task2(final ArrayList<Menu> menuList, Date startDate, Date endDate){
+    public void getPopularMenu(final ArrayList<Menu> menuList, Date startDate, Date endDate, final String reportType){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final ArrayList<menu> existingMenu = new ArrayList<menu>();
 
@@ -248,6 +255,7 @@ public class GenerateReport extends AppCompatActivity {
 
                         int tempMenuID = Integer.parseInt(document.getData().get("menuID").toString());
                         int tempQuantity = Integer.parseInt(document.getData().get("quantity").toString());
+                        double tempSales = Double.parseDouble(document.getData().get("subtotal").toString());
                         boolean exist = false;
 
                         //Below code is to insert "menu id" and "order quantity" into an arraylist
@@ -259,33 +267,46 @@ public class GenerateReport extends AppCompatActivity {
                                 if (tempMenuID == existingMenu.get(j).getMenuID()) {     //If menuID already exist, they add quantity to the menuID
 
                                     int newQuantity = existingMenu.get(j).getQuantity() + tempQuantity;
+                                    double newSales = existingMenu.get(j).getSales() + tempSales;
                                     existingMenu.get(j).setQuantity(newQuantity);
+                                    existingMenu.get(j).setSales(newSales);
                                     exist = true;
                                 }
                             }
                         }
                         if (exist == false) {    //menuID not exist, so add a new menuID together with its quantity
-                            menu newmenu = new menu(tempMenuID, tempQuantity);
+                            menu newmenu = new menu(tempMenuID, tempQuantity, tempSales);
                             existingMenu.add(newmenu);
                         }
-
                     }
                     //Bubble Sort
-                    boolean swapped = true;
-                    while(swapped){
-                        swapped = false;
-                        for(int i = 1; i < existingMenu.size(); i ++){
-                            menu temp = null;
-                            if(existingMenu.get(i-1).getQuantity() < existingMenu.get(i).getQuantity()){   //if everyting is sorted, swapped remain false because
-                                temp = existingMenu.get(i-1);                                              //the if statements cannot be entered,
-                                existingMenu.set(i-1, existingMenu.get(i));                                //then swapped = true cannot be executed, hence exit loop
-                                existingMenu.set(i, temp);
-                                swapped = true;
+
+                        boolean swapped = true;
+                        while (swapped) {
+                            swapped = false;
+                            for (int i = 1; i < existingMenu.size(); i++) {
+                                menu temp = null;
+                                if(reportType.equals("Popular Menu")){
+                                    if (existingMenu.get(i - 1).getQuantity() < existingMenu.get(i).getQuantity()) {   //if everyting is sorted, swapped remain false because
+                                        temp = existingMenu.get(i - 1);                                              //the if statements cannot be entered,
+                                        existingMenu.set(i - 1, existingMenu.get(i));                                //then swapped = true cannot be executed, hence exit loop
+                                        existingMenu.set(i, temp);
+                                        swapped = true;
+                                    }
+                                }
+                                else if(reportType.equals("Monthly Sales")){
+                                    if (existingMenu.get(i - 1).getSales() < existingMenu.get(i).getSales()) {   //if everyting is sorted, swapped remain false because
+                                        temp = existingMenu.get(i - 1);                                              //the if statements cannot be entered,
+                                        existingMenu.set(i - 1, existingMenu.get(i));                                //then swapped = true cannot be executed, hence exit loop
+                                        existingMenu.set(i, temp);
+                                        swapped = true;
+                                    }
+                                }
                             }
                         }
-                    }
+
+
                     ArrayList<menu> filteredFoodTypeMenu = new ArrayList<menu>();
-                    Toast.makeText(getApplicationContext(),menuList.get(1).getType().toString(), Toast.LENGTH_LONG).show();
 
                     for(int i = 0; i < existingMenu.size(); i++ ){
                         for(int j=0 ; j<menuList.size() ; j++){
@@ -297,28 +318,34 @@ public class GenerateReport extends AppCompatActivity {
                         }
                     }
 
-
-                    adapter = new popularMenuListAdapter(filteredFoodTypeMenu, menuList, getApplicationContext());
+                    adapter = new popularMenuListAdapter(filteredFoodTypeMenu, menuList, reportType, getApplicationContext());
                     menuListView.setAdapter(adapter);
+                    if(reportType.equals("Popular Menu")){
+                        col1TV.setText("Menu Name");
+                        col2TV.setText("Total Quantity");
+                    }
+                    else if(reportType.equals("Monthly Sales")){
+                        col1TV.setText("Menu Name");
+                        col2TV.setText("Total Sales(RM)");
+                    }
                     pd.dismiss();
                 }
             }
         });
     }
 
-    public void getMonthlySales(){
-
-    }
 
     public class popularMenuListAdapter extends BaseAdapter {
         private ArrayList<menu> menu;
         private ArrayList<Menu> menuItems;
+        private String reportType;
         private Context context;
 
 
-        public popularMenuListAdapter(ArrayList<GenerateReport.menu> menu, ArrayList<Menu> menuItems, Context context) {
+        public popularMenuListAdapter(ArrayList<GenerateReport.menu> menu, ArrayList<Menu> menuItems, String reportType, Context context) {
             this.menu = menu;
             this.menuItems = menuItems;
+            this.reportType = reportType;
             this.context = context;
         }
 
@@ -358,19 +385,34 @@ public class GenerateReport extends AppCompatActivity {
                     menuName = menuItems.get(i).getName();
             }
             menuNameTV.setText(menuName );
-            menuQuantityTV.setText(Integer.toString(menu.get(pos).getQuantity()));
+            if(reportType.equals("Monthly Sales")){
+                menuQuantityTV.setText(Double.toString(menu.get(pos).getSales()));
+            }
+            else if(reportType.equals("Popular Menu")) {
+                menuQuantityTV.setText(Integer.toString(menu.get(pos).getQuantity()));
+            }
             return view1;
         }
     }
 
     ///Custom object class for sorting menuID based on quantity
     public class menu{
-        private int menuID;
-        private int quantity;
+        private int menuID;    //used for popular menu
+        private int quantity;  //used for popular menu
+        private double sales;  //this field only use for monthly sales
 
-        public menu(int menuID, int quantity) {
+        public menu(int menuID, int quantity, double sales) {
             this.menuID = menuID;
             this.quantity = quantity;
+            this.sales = sales;
+        }
+
+        public double getSales() {
+            return sales;
+        }
+
+        public void setSales(double sales) {
+            this.sales = sales;
         }
 
         public int getMenuID() {
