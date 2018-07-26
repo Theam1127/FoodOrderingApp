@@ -69,7 +69,8 @@ public class AddOrderItem extends AppCompatActivity {
                         String name = documentSnapshot.getString("menuName");
                         double price = documentSnapshot.getDouble("menuPrice");
                         String type = documentSnapshot.getString("menuType");
-                        Menu item = new Menu(menuID, name, type, available, price);
+                        String desc = "asdsa";
+                        Menu item = new Menu(menuID, name,desc, type, available, price);
                         menu.add(item);
                         menuItems.add(name);
                         if (!filterItems.contains(documentSnapshot.getData().get("menuType").toString()))

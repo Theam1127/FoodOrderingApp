@@ -5,20 +5,29 @@ import java.io.Serializable;
 public class Menu implements Serializable{
     public int menuID;
     public String name;
+    public String desc;
     public String type;
     public boolean available;
     public double price;
 
     public Menu(){}
 
-    public Menu(int menuID, String name, String type, boolean available, double price) {
+    public Menu(int menuID, String name,String desc, String type, boolean available, double price) {
         this.menuID = menuID;
         this.name = name;
+        this.desc = desc;
         this.type = type;
         this.available = available;
         this.price = price;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public int getMenuID() {
         return menuID;
