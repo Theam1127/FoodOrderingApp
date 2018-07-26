@@ -50,7 +50,7 @@ public class GenerateReport extends AppCompatActivity {
     String startDate = null;
     String endDate = null;
     ListView menuListView;
-    Spinner reportTypeSpinner;
+    Spinner reportTypeSpinner, foodTypeSpinner;
     popularMenuListAdapter adapter;
     ProgressDialog pd;
     TextView startDateTV, endDateTV;
@@ -65,6 +65,7 @@ public class GenerateReport extends AppCompatActivity {
         endDateTV = (TextView) findViewById(R.id.endDate2TV);
         menuListView = (ListView) findViewById(R.id.reportLV);
         reportTypeSpinner = (Spinner)findViewById(R.id.reportTypeSpinner);
+        foodTypeSpinner = (Spinner)findViewById(R.id.foodTypeSpinner);
 
         startDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +145,18 @@ public class GenerateReport extends AppCompatActivity {
             }
         });
 
+        foodTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                verifyInput();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
     }
 
@@ -191,10 +204,11 @@ public class GenerateReport extends AppCompatActivity {
                         int tempMenuID = Integer.parseInt(document.getData().get("menuID").toString());
                         String tempMenuName = document.getData().get("menuName").toString();
                         String tempMenuType = document.getData().get("menuType").toString();
+                        String tempMenuDesc = document.getData().get("menuDesc").toString();
                         Boolean tempMenuAvailability = Boolean.parseBoolean(document.getData().get("menuStatus").toString());
                         double menuPrice = document.getDouble("menuPrice");
 
-                        Menu newmenu = new Menu(tempMenuID, tempMenuName, tempMenuType, tempMenuAvailability, menuPrice);
+                        Menu newmenu = new Menu(tempMenuID, tempMenuName, tempMenuDesc, tempMenuType, tempMenuAvailability, menuPrice);
                         menuList.add(newmenu);
                     }
                 }
@@ -270,8 +284,21 @@ public class GenerateReport extends AppCompatActivity {
                             }
                         }
                     }
+                    ArrayList<menu> filteredFoodTypeMenu = new ArrayList<menu>();
+                    Toast.makeText(getApplicationContext(),menuList.get(1).getType().toString(), Toast.LENGTH_LONG).show();
 
-                    adapter = new popularMenuListAdapter(existingMenu, menuList, getApplicationContext());
+                    for(int i = 0; i < existingMenu.size(); i++ ){
+                        for(int j=0 ; j<menuList.size() ; j++){
+                            if (existingMenu.get(i).getMenuID() == menuList.get(j).getMenuID()) {
+                                if (menuList.get(j).getType().equals(foodTypeSpinner.getSelectedItem().toString())) {
+                                    filteredFoodTypeMenu.add(existingMenu.get(i));
+                                }
+                            }
+                        }
+                    }
+
+
+                    adapter = new popularMenuListAdapter(filteredFoodTypeMenu, menuList, getApplicationContext());
                     menuListView.setAdapter(adapter);
                     pd.dismiss();
                 }

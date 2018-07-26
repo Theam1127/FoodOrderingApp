@@ -49,5 +49,10 @@
     <string name="nulltext">Null</string>
     <string name="generate_report">Generate Report</string>
     <string name="tao_to_select">Tap to select</string>
+    <string name="type">Type :</string>
+    <string-array name="food_type">
+        <item>Food</item>
+        <item>Drink</item>
+    </string-array>
 
 </resources>
