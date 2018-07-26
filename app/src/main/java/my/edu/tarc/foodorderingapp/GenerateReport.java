@@ -83,7 +83,6 @@ public class GenerateReport extends AppCompatActivity {
                         year_calendar1 = year;
 
                         int month1 = month + 1;
-
                         startDate = day + "/" + month1 + "/" + year;
                         startDateTV.setText(startDate);
                         verifyInput();
@@ -154,12 +153,12 @@ public class GenerateReport extends AppCompatActivity {
 
             Date newStartDateFormat = null;
             Date newEndDateFormat = null;
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
             try {
-                Date startdate = df.parse(startDate);
+                Date startdate = df.parse(startDate + " " + "00:00:00");
                 newStartDateFormat = startdate;
-                Date enddate = df.parse(endDate);
+                Date enddate = df.parse(endDate + " " + "23:59:59");
                 newEndDateFormat = enddate;
 
             } catch (ParseException ex) {
@@ -181,7 +180,7 @@ public class GenerateReport extends AppCompatActivity {
 
     public void getPopularMenu_task1(final Date startDate, final Date endDate){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final ArrayList<menuItems> menuList = new ArrayList<menuItems>();
+        final ArrayList<Menu> menuList = new ArrayList<Menu>();
 
         db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -191,8 +190,11 @@ public class GenerateReport extends AppCompatActivity {
 
                         int tempMenuID = Integer.parseInt(document.getData().get("menuID").toString());
                         String tempMenuName = document.getData().get("menuName").toString();
+                        String tempMenuType = document.getData().get("menuType").toString();
+                        Boolean tempMenuAvailability = Boolean.parseBoolean(document.getData().get("menuStatus").toString());
+                        double menuPrice = document.getDouble("menuPrice");
 
-                        menuItems newmenu = new menuItems(tempMenuID, tempMenuName);
+                        Menu newmenu = new Menu(tempMenuID, tempMenuName, tempMenuType, tempMenuAvailability, menuPrice);
                         menuList.add(newmenu);
                     }
                 }
@@ -201,7 +203,7 @@ public class GenerateReport extends AppCompatActivity {
                 while(swapped){
                     swapped = false;
                     for(int i = 1; i > menuList.size(); i ++){
-                        menuItems temp = null;
+                        Menu temp = null;
                         if(menuList.get(i-1).getMenuID() < menuList.get(i).getMenuID()){   //if everyting is sorted, swapped remain false because
                             temp = menuList.get(i-1);                                              //the if statements cannot be entered,
                             menuList.set(i-1, menuList.get(i));                                //then swapped = true cannot be executed, hence exit loop
@@ -216,7 +218,7 @@ public class GenerateReport extends AppCompatActivity {
     }
 
 
-    public void getPopularMenu_task2(final ArrayList<menuItems> menuList, Date startDate, Date endDate){
+    public void getPopularMenu_task2(final ArrayList<Menu> menuList, Date startDate, Date endDate){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final ArrayList<menu> existingMenu = new ArrayList<menu>();
 
@@ -283,11 +285,11 @@ public class GenerateReport extends AppCompatActivity {
 
     public class popularMenuListAdapter extends BaseAdapter {
         private ArrayList<menu> menu;
-        private ArrayList<menuItems> menuItems;
+        private ArrayList<Menu> menuItems;
         private Context context;
 
 
-        public popularMenuListAdapter(ArrayList<GenerateReport.menu> menu, ArrayList<GenerateReport.menuItems> menuItems, Context context) {
+        public popularMenuListAdapter(ArrayList<GenerateReport.menu> menu, ArrayList<Menu> menuItems, Context context) {
             this.menu = menu;
             this.menuItems = menuItems;
             this.context = context;
@@ -361,30 +363,5 @@ public class GenerateReport extends AppCompatActivity {
         }
     }
 
-    public class menuItems{
-        private int menuID;
-        private String name;
-
-        public menuItems(int menuID, String name) {
-            this.menuID = menuID;
-            this.name = name;
-        }
-
-        public int getMenuID() {
-            return menuID;
-        }
-
-        public void setMenuID(int menuID) {
-            this.menuID = menuID;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
 
 }
