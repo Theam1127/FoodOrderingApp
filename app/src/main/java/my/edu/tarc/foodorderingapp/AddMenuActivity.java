@@ -20,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +56,7 @@ public class AddMenuActivity extends AppCompatActivity {
         radioGroupType = (RadioGroup) findViewById(R.id.radioGroupMenuType);
         radioButtonTypeDrink = (RadioButton) findViewById(R.id.radioButtonDrink);
         radioButtonTypeFood = (RadioButton) findViewById(R.id.radioButtonFood);
-        addMenu = (Button) findViewById(R.id.buttonAddMenu);
+        addMenu = (Button) findViewById(R.id.buttonMaintenance);
         reset = (Button) findViewById(R.id.buttonClear);
 
         mFirestore.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

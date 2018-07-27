@@ -66,6 +66,7 @@ public class LogIn extends AppCompatActivity {
                                 Intent intent = new Intent(LogIn.this,HomePage.class);
                                 startActivity(intent);
                                 pd.dismiss();
+                                finish();
                             }
                             else{
                                 Toast.makeText(LogIn.this, "Invalid Account", Toast.LENGTH_SHORT).show();
@@ -83,5 +84,11 @@ public class LogIn extends AppCompatActivity {
 
 
         
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
     }
 }

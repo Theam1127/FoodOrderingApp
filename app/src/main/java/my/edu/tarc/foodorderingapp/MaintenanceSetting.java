@@ -1,32 +1,52 @@
 package my.edu.tarc.foodorderingapp;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class MaintenanceSetting extends AppCompatActivity {
-    MS_FragmentsAdapter ms_fragmentsAdapter;
-    ViewPager ms_viewPager;
+    Button buttonAddMenu, buttonUpdateMenu, buttonAddStaff, buttonUpdateStaff;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maintenance_setting);
-        ms_fragmentsAdapter = new MS_FragmentsAdapter(getSupportFragmentManager());
-        ms_viewPager = (ViewPager)findViewById(R.id.container);
-        setupViewPager(ms_viewPager);
 
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(ms_viewPager);
-
-    }
-
-    private void setupViewPager(ViewPager viewPager){
-        MS_FragmentsAdapter fragmentsAdapter = new MS_FragmentsAdapter(getSupportFragmentManager());
-        fragmentsAdapter.addFragment(new MS_MenuMaintenance(),"Menu Maintenance");
-        fragmentsAdapter.addFragment(new MS_StaffMaintenance(),"Staff Maintenance");
-        viewPager.setAdapter(fragmentsAdapter);
-
+        buttonAddMenu = findViewById(R.id.buttonAddMenu);
+        buttonAddStaff = findViewById(R.id.buttonAddStaff);
+        buttonUpdateMenu = findViewById(R.id.buttonUpdateMenu);
+        buttonUpdateStaff = findViewById(R.id.buttonUpdateStaff);
+        buttonAddMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentAddMenu = new Intent(MaintenanceSetting.this, AddMenuActivity.class);
+                startActivity(intentAddMenu);
+            }
+        });
+        buttonUpdateMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentUpdateMenu = new Intent(MaintenanceSetting.this, UpdateMenuActivity.class);
+                startActivity(intentUpdateMenu);
+            }
+        });
+        buttonAddStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentAddStaff = new Intent(MaintenanceSetting.this, AddStaffActivity.class);
+                startActivity(intentAddStaff);
+            }
+        });
+        buttonUpdateStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intentUpdateStaff = new Intent(HomePage.this, AddMenuActivity.class);
+                //startActivity(intentAddMenu);
+            }
+        });
     }
 }

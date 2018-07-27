@@ -60,5 +60,11 @@
     <string name="hint_username">Your Username</string>
     <string name="hint_password">Your Password</string>
     <string name="login">Log In</string>
+    <string name="maintenance">Maintenance</string>
+    <string name="logout">Logout</string>
+    <string name="add_menu">Add Menu</string>
+    <string name="update_menu">Update Menu</string>
+    <string name="add_staff">Add Staff</string>
+    <string name="update_staff">Update Staff</string>
 
 </resources>

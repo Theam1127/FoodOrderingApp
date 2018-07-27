@@ -7,32 +7,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
 public class HomePage extends AppCompatActivity {
 
-    private Button btnOrder;
-    private Button btnPayHis;
-    private Button btnGenerateReport;
-    private Button buttonUpdateMenu, buttonAddMenu, buttonAddStaff, buttonUpdateStaff;
+    private ImageButton btnOrder, btnPayHis, btnGenerateReport, btnMaintenance;
+    private Button btnLogout;
     private SharedPreferences share;
-
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        btnOrder = (Button)findViewById(R.id.btnOrder);
-        btnPayHis = (Button)findViewById(R.id.btnPayHis);
-        btnGenerateReport = (Button)findViewById(R.id.btnGenerateReport);
-        buttonAddMenu = (Button)findViewById(R.id.buttonAddMenu);
-        buttonUpdateMenu = (Button)findViewById(R.id.buttonUpdateMenu);
-        buttonAddStaff = (Button)findViewById(R.id.buttonAddStaff);
-        buttonUpdateStaff = (Button)findViewById(R.id.buttonUpdateStaff);
-
+        btnOrder = findViewById(R.id.imageButtonOrder);
+        btnPayHis = findViewById(R.id.imageButtonHistory);
+        btnGenerateReport = findViewById(R.id.imageButtonReport);
+        btnMaintenance = findViewById(R.id.imageButtonMaintenance);
+        btnLogout = findViewById(R.id.buttonLogout);
         //Yeap THeam staff ID
         share = getSharedPreferences("staffID", Context.MODE_PRIVATE);
         String stid = share.getString("id",null);
+        editor = share.edit();
 
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
@@ -57,34 +53,22 @@ public class HomePage extends AppCompatActivity {
                 startActivity(intentReport);
             }
         });
-        buttonAddMenu.setOnClickListener(new View.OnClickListener() {
+        btnMaintenance.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intentAddMenu = new Intent(HomePage.this, AddMenuActivity.class);
-                startActivity(intentAddMenu);
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, MaintenanceSetting.class);
+                startActivity(intent);
             }
         });
-        buttonUpdateMenu.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intentUpdateMenu = new Intent(HomePage.this, UpdateMenuActivity.class);
-                startActivity(intentUpdateMenu);
+            public void onClick(View view) {
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(HomePage.this, LogIn.class);
+                startActivity(intent);
+                finish();
             }
         });
-        buttonAddStaff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentAddStaff = new Intent(HomePage.this, AddStaffActivity.class);
-                startActivity(intentAddStaff);
-            }
-        });
-        buttonUpdateStaff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intentUpdateStaff = new Intent(HomePage.this, AddMenuActivity.class);
-                //startActivity(intentAddMenu);
-            }
-        });
-
     }
 }
