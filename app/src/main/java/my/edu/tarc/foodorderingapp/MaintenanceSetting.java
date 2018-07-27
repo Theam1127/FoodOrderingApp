@@ -44,8 +44,8 @@ public class MaintenanceSetting extends AppCompatActivity {
         buttonUpdateStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intentUpdateStaff = new Intent(HomePage.this, AddMenuActivity.class);
-                //startActivity(intentAddMenu);
+                Intent intentUpdateStaff = new Intent(MaintenanceSetting.this,UpdateStaffActivity.class);
+                startActivity(intentUpdateStaff);
             }
         });
     }

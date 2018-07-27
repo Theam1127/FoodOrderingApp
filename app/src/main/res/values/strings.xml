@@ -66,5 +66,18 @@
     <string name="update_menu">Update Menu</string>
     <string name="add_staff">Add Staff</string>
     <string name="update_staff">Update Staff</string>
+    <string-array name="position">
+        <item>Chef</item>
+        <item>Cleaner</item>
+        <item>Cashier</item>
+        <item>Manager</item>
+        <item>Waiter</item>
+    </string-array>
+    <string-array name="status">
+        <item>Working</item>
+        <item>Resign</item>
+        <item>Retire</item>
+        <item>MIA</item>
+    </string-array>
 
 </resources>

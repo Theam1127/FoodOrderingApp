@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStaffActivity">
+    tools:context="my.edu.tarc.foodorderingapp.UpdateStaffActivity">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -19,13 +19,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageViewStaff"
+                android:id="@+id/imageViewStaff2"
                 android:layout_width="match_parent"
                 android:layout_height="201dp"
                 app:srcCompat="@drawable/cy" />
 
             <Button
-                android:id="@+id/buttonBrowse"
+                android:id="@+id/buttonBrowse2"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:text="Browse" />
@@ -36,12 +36,10 @@
                 android:layout_height="24dp"
                 android:text="Staff ID : " />
 
-            <EditText
-                android:id="@+id/editTextStaffId"
+            <Spinner
+                android:id="@+id/spinnerStaffId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName" />
+                android:layout_height="45dp" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -50,7 +48,7 @@
                 android:text="Name : " />
 
             <EditText
-                android:id="@+id/editTextStaffName"
+                android:id="@+id/editTextStaffName2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -63,62 +61,10 @@
                 android:text="Position :" />
 
             <Spinner
-                android:id="@+id/spinnerStaffPosition"
+                android:id="@+id/spinnerStaffPosition2"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:entries="@array/position" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="85dp"
-                android:layout_height="24dp"
-                android:text="D.O.B. : " />
-
-            <DatePicker
-                android:id="@+id/datePickerDOB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="85dp"
-                android:layout_height="24dp"
-                android:text="I.C. : " />
-
-            <EditText
-                android:id="@+id/editTextIC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="85dp"
-                android:layout_height="24dp"
-                android:text="Gender : " />
-
-            <RadioGroup
-                android:id="@+id/radioGroupGender"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/radioButtonMale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Male" />
-
-                <RadioButton
-                    android:id="@+id/radioButtonFemale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Female" />
-            </RadioGroup>
 
             <TextView
                 android:id="@+id/textView13"
@@ -127,7 +73,7 @@
                 android:text="Contact : " />
 
             <EditText
-                android:id="@+id/editTextStaffContact"
+                android:id="@+id/editTextStaffContact2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -141,7 +87,7 @@
                 android:text="E-mail : " />
 
             <EditText
-                android:id="@+id/editTextStaffEmail"
+                android:id="@+id/editTextStaffEmail2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -155,17 +101,17 @@
 
 
             <Spinner
-                android:id="@+id/spinnerStaffStatus"
+                android:id="@+id/spinnerStaffStatus2"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:entries="@array/status" />
 
             <Button
-                android:id="@+id/buttonAddStaff"
+                android:id="@+id/buttonUpdateStaff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="Add" />
+                android:text="Update" />
 
             <Button
                 android:id="@+id/button4"
