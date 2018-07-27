@@ -38,6 +38,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static android.view.View.INVISIBLE;
+
 public class GenerateReport extends AppCompatActivity {
 
     int day_calendar1 = 0;
@@ -51,9 +53,10 @@ public class GenerateReport extends AppCompatActivity {
     String endDate = null;
     ListView menuListView;
     Spinner reportTypeSpinner, foodTypeSpinner;
-    popularMenuListAdapter adapter;
+    popularMenuListAdapter popularMenuListAdapter;
+    staffListAdapter staffListAdapter;
     ProgressDialog pd;
-    TextView startDateTV, endDateTV, col1TV, col2TV;
+    TextView startDateTV, endDateTV ,col3TV, col4TV,col5TV, col6TV, typeTV;
 
 
     @Override
@@ -63,11 +66,16 @@ public class GenerateReport extends AppCompatActivity {
 
         startDateTV = (TextView) findViewById(R.id.startDate2TV);
         endDateTV = (TextView) findViewById(R.id.endDate2TV);
-        col1TV = (TextView)findViewById(R.id.col1TV);
-        col2TV = (TextView)findViewById(R.id.col2TV);
+        col3TV = (TextView)findViewById(R.id.col3TV);
+        col4TV = (TextView)findViewById(R.id.col4TV);
+        col5TV = (TextView)findViewById(R.id.col5TV);
+        col6TV = (TextView)findViewById(R.id.col6TV);
         menuListView = (ListView) findViewById(R.id.reportLV);
         reportTypeSpinner = (Spinner)findViewById(R.id.reportTypeSpinner);
         foodTypeSpinner = (Spinner)findViewById(R.id.foodTypeSpinner);
+        typeTV = (TextView)findViewById(R.id.typeTV);
+
+        reportTypeSpinner.setClickable(true);
 
         startDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,14 +139,26 @@ public class GenerateReport extends AppCompatActivity {
         reportTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                String reportType = reportTypeSpinner.getItemAtPosition(pos).toString();
-                if(reportType.equals("Monthly Sales")) {
-                    verifyInput();
-                }
-                else if(reportType.equals("Popular Menu")) {
-                    verifyInput();
+                if(reportTypeSpinner.getItemAtPosition(pos).equals("Popular Menu")){
 
+                    typeTV.setVisibility(view.VISIBLE);
+                    foodTypeSpinner.setVisibility(view.VISIBLE);
+                    foodTypeSpinner.setClickable(true);
                 }
+                else if(reportTypeSpinner.getItemAtPosition(pos).equals("Monthly Sales")){
+
+                    typeTV.setVisibility(view.VISIBLE);
+                    foodTypeSpinner.setVisibility(view.VISIBLE);
+                    foodTypeSpinner.setClickable(true);
+                }
+                else if(reportTypeSpinner.getItemAtPosition(pos).equals("Staff Summary")){
+
+
+                    typeTV.setVisibility(INVISIBLE);
+                    foodTypeSpinner.setVisibility(INVISIBLE);
+                    foodTypeSpinner.setClickable(false);
+                }
+                verifyInput();
             }
 
             @Override
@@ -150,6 +170,7 @@ public class GenerateReport extends AppCompatActivity {
         foodTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
                 verifyInput();
             }
 
@@ -183,13 +204,21 @@ public class GenerateReport extends AppCompatActivity {
             if(newStartDateFormat.after(newEndDateFormat)) {
                 Toast.makeText(getApplicationContext(), "Start date must be before or on the same day as end date.", Toast.LENGTH_LONG).show();
                 menuListView.setAdapter(null);
-                col1TV.setText("");
-                col1TV.setText("");
+                col3TV.setText("");
+                col5TV.setText("");
+                col4TV.setText("");
+                col6TV.setText("");
             }
             else{
                 pd.show();
                 String reportType = reportTypeSpinner.getSelectedItem().toString();
-                getMenuList(newStartDateFormat,newEndDateFormat, reportType);
+
+                if(reportType.equals("Staff Summary")){
+                    getStaff_task1(newStartDateFormat, newEndDateFormat);
+                }
+                else if(reportType.equals("Monthly Sales") || reportType.equals("Popular Menu")) {
+                    getMenuList(newStartDateFormat, newEndDateFormat, reportType);
+                }
 
 
             }
@@ -318,20 +347,167 @@ public class GenerateReport extends AppCompatActivity {
                         }
                     }
 
-                    adapter = new popularMenuListAdapter(filteredFoodTypeMenu, menuList, reportType, getApplicationContext());
-                    menuListView.setAdapter(adapter);
+                    popularMenuListAdapter = new popularMenuListAdapter(filteredFoodTypeMenu, menuList, reportType, getApplicationContext());
+                    menuListView.setAdapter(popularMenuListAdapter);
+                    col3TV.setWidth(700);
+                    col4TV.setWidth(0);
+                    col5TV.setWidth(300);
+                    col6TV.setWidth(0);
                     if(reportType.equals("Popular Menu")){
-                        col1TV.setText("Menu Name");
-                        col2TV.setText("Total Quantity");
+                        col3TV.setText("Menu Name");
+                        col3TV.setWidth(700);
+                        col5TV.setText("Total Quantity");
+                        col5TV.setWidth(300);
                     }
                     else if(reportType.equals("Monthly Sales")){
-                        col1TV.setText("Menu Name");
-                        col2TV.setText("Total Sales(RM)");
+                        col3TV.setText("Menu Name");
+                        col3TV.setWidth(700);
+                        col5TV.setText("Total Sales(RM)");
+                        col5TV.setWidth(300);
                     }
                     pd.dismiss();
                 }
             }
         });
+    }
+
+    //nd getStaff_task1 and getStaff_task2 to solve firestore "Range filter on different fields" limitation
+    public void getStaff_task1(final Date startDate, final Date endDate){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final ArrayList<staff> staffList = new ArrayList<staff>();
+
+        db.collection("Staff").whereGreaterThanOrEqualTo("staffLeaveDate", startDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot document : task.getResult()){
+
+                        int staffID = Integer.parseInt(document.getData().get("staffID").toString());
+                        String staffName = document.getData().get("staffName").toString();
+                        String staffPosition = document.getData().get("staffPosition").toString();
+                        String staffStatus = document.getData().get("staffStatus").toString();
+
+                        staff newStuff = new staff(staffID, staffName, staffPosition, staffStatus);
+                        staffList.add(newStuff);
+                    }
+                    getStaff_task2(endDate, staffList);
+                }
+            }
+        });
+    }
+
+    public void getStaff_task2(Date endDate, final ArrayList<staff> staffList1){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final ArrayList<staff> staffList2 = new ArrayList<staff>();
+        final ArrayList<staff> staffListCombined = new ArrayList<staff>();
+
+        db.collection("Staff").whereLessThanOrEqualTo("staffJoinDate", endDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot document : task.getResult()){
+
+                        Integer staffID = Integer.parseInt(document.getData().get("staffID").toString());
+                        String staffName = document.getData().get("staffName").toString();
+                        String staffPosition = document.getData().get("staffPosition").toString();
+                        String staffStatus = document.getData().get("staffStatus").toString();
+
+                        staff newStuff = new staff(staffID, staffName, staffPosition, staffStatus);
+                        staffList2.add(newStuff);
+                    }
+
+                    for(int i = 0; i < staffList1.size(); i++){
+                        for(int j = 0; j < staffList2.size(); j++){
+                            if(staffList1.get(i).getStaffID() == staffList2.get(j).getStaffID()){
+                                staffListCombined.add(staffList1.get(i));
+                            }
+                        }
+                    }
+
+                    //Bubble Sort
+                    if(staffList1.size()!=0 && staffList2.size()!=0) {
+                        boolean swapped = true;
+                        while (swapped) {
+                            swapped = false;
+                            for (int i = 1; i > staffListCombined.size(); i++) {
+                                staff temp = null;
+                                if (staffListCombined.get(i - 1).getStaffName().compareTo(staffListCombined.get(i).getStaffName()) > 0) {   //if everyting is sorted, swapped remain false because
+                                    temp = staffListCombined.get(i - 1);                                              //the if statements cannot be entered,
+                                    staffListCombined.set(i - 1, staffListCombined.get(i));                                //then swapped = true cannot be executed, hence exit loop
+                                    staffListCombined.set(i, temp);
+                                    swapped = true;
+                                }
+                            }
+                        }
+                    }
+                    staffListAdapter = new staffListAdapter(staffListCombined, getApplicationContext());
+                    menuListView.setAdapter(staffListAdapter);
+                    col3TV.setWidth(100);
+                    col4TV.setWidth(420);
+                    col5TV.setWidth(190);
+                    col6TV.setWidth(190);
+                    col3TV.setText("ID");
+                    col4TV.setText("Name");
+                    col5TV.setText("Position");
+                    col6TV.setText("Status");
+                    pd.dismiss();
+                }
+
+
+            }
+        });
+    }
+
+    public class staffListAdapter extends BaseAdapter {
+        private ArrayList<staff> staffList;
+        private Context context;
+
+
+        public staffListAdapter(ArrayList<staff> staffList, Context context) {
+            this.staffList = staffList;
+            this.context = context;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return super.areAllItemsEnabled();
+        }
+
+        @Override
+        public int getCount() {
+            return staffList.size();
+        }
+
+        @Override
+        public staff getItem(int pos) {
+            return staffList.get(pos);
+        }
+
+        @Override
+        public View getView(int pos, View convertView, ViewGroup viewGroup) {
+            View view1 = convertView;
+            if(view1==null){
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view1 = inflater.inflate(R.layout.staff_list_view,null);
+            }
+            //Toast.makeText(getApplicationContext(), menu.get(pos).getMenuID() + ": " + menu.get(pos).getQuantity(), Toast.LENGTH_LONG).show();
+            TextView staffIDTV = (TextView)view1.findViewById(R.id.staffIDTV);
+            TextView staffNameTV = (TextView)view1.findViewById(R.id.staffNameTV);
+            TextView staffPositionTV = (TextView)view1.findViewById(R.id.staffPositionTV);
+            TextView staffStatusTV = (TextView)view1.findViewById(R.id.staffStatusTV);
+
+            staffIDTV.setText(Integer.toString(staffList.get(pos).getStaffID()));
+            staffNameTV.setText(staffList.get(pos).getStaffName());
+            staffPositionTV.setText(staffList.get(pos).getStaffPosition());
+            staffStatusTV.setText(staffList.get(pos).getStaffStatus());
+
+            return view1;
+        }
     }
 
 
@@ -432,5 +608,50 @@ public class GenerateReport extends AppCompatActivity {
         }
     }
 
+    public class staff{
+        private int staffID;
+        private String staffName;
+        private String staffPosition;
+        private String staffStatus;
+
+        public staff(int staffID, String staffName, String staffPosition, String staffStatus) {
+            this.staffID = staffID;
+            this.staffName = staffName;
+            this.staffPosition = staffPosition;
+            this.staffStatus = staffStatus;
+        }
+
+        public int getStaffID() {
+            return staffID;
+        }
+
+        public void setStaffID(int staffID) {
+            this.staffID = staffID;
+        }
+
+        public String getStaffName() {
+            return staffName;
+        }
+
+        public void setStaffName(String staffName) {
+            this.staffName = staffName;
+        }
+
+        public String getStaffPosition() {
+            return staffPosition;
+        }
+
+        public void setStaffPosition(String staffPosition) {
+            this.staffPosition = staffPosition;
+        }
+
+        public String getStaffStatus() {
+            return staffStatus;
+        }
+
+        public void setStaffStatus(String staffStatus) {
+            this.staffStatus = staffStatus;
+        }
+    }
 
 }

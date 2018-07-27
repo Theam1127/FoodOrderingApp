@@ -32,6 +32,7 @@
     <string-array name="report_type">
         <item>Monthly Sales</item>
         <item>Popular Menu</item>
+        <item>Staff Summary</item>
     </string-array>
     <string name="table">Tables:</string>
     <string name="clear_orders">Clear Orders</string>

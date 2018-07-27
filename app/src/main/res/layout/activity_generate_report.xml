@@ -36,11 +36,12 @@
     <ListView
         android:id="@+id/reportLV"
         android:layout_width="354dp"
-        android:layout_height="344dp"
+        android:layout_height="347dp"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp"
+        android:layout_marginTop="232dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/col2TV" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/startDateTV"
@@ -65,32 +66,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/startDate2TV"
         app:layout_constraintTop_toBottomOf="@+id/reportTypeSpinner" />
-
-    <TextView
-        android:id="@+id/col1TV"
-        android:layout_width="220dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/reportLV"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foodTypeSpinner"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/col2TV"
-        android:layout_width="134dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="92dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/col1TV"
-        app:layout_constraintTop_toBottomOf="@+id/endDate2TV" />
 
     <TextView
         android:id="@+id/startDate2TV"
@@ -144,5 +119,54 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/typeTV"
         app:layout_constraintTop_toBottomOf="@+id/startDate2TV" />
+
+    <TextView
+        android:id="@+id/col3TV"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="197dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/reportLV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/col4TV"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="43dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/col3TV"
+        app:layout_constraintTop_toBottomOf="@+id/foodTypeSpinner"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/col5TV"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="43dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/col4TV"
+        app:layout_constraintTop_toBottomOf="@+id/foodTypeSpinner"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/col6TV"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="92dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/col5TV"
+        app:layout_constraintTop_toBottomOf="@+id/endDate2TV"
+        android:textSize="15sp"/>
 
 </android.support.constraint.ConstraintLayout>
