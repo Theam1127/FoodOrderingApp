@@ -1,5 +1,7 @@
 package my.edu.tarc.foodorderingapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,8 @@ public class MakePayment extends AppCompatActivity {
     int nextID;
     double paidAmount, changes;
     FirebaseFirestore db;
+    String staffID;
+    SharedPreferences share;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,8 @@ public class MakePayment extends AppCompatActivity {
         etAmountPaid = findViewById(R.id.editTextAmountPaid);
         btnPay = findViewById(R.id.buttonPay);
         btnBack = findViewById(R.id.btnBack);
+        share = getSharedPreferences("staffID", Context.MODE_PRIVATE);
+        staffID = share.getString("id",null);
         tvStatus.setText("");
         tvTableNo.setText(""+tableNo);
         tvTotal.setText(String.format("RM %.2f", total));
@@ -79,7 +85,7 @@ public class MakePayment extends AppCompatActivity {
                                     newPayment.put("orderID", orderID);
                                     newPayment.put("paymentDate", FieldValue.serverTimestamp());
                                     newPayment.put("paymentID", nextID);
-                                    newPayment.put("staffID", "S0001");
+                                    newPayment.put("staffID", staffID);
                                     db.collection("Payment").add(newPayment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentReference> task) {
