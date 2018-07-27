@@ -35,16 +35,20 @@ public class PaymentHistoryDetail extends AppCompatActivity {
 
         String amtPaid = intent.getStringExtra("amt");
         String change = intent.getStringExtra("chg");
-        String grangTotal = intent.getStringExtra("gt");
+        String grandTotal = intent.getStringExtra("gt");
         String orderID = intent.getStringExtra("oid");
         String payDate = intent.getStringExtra("paydate");
         String payTime = intent.getStringExtra("paytime");
         String payID = intent.getStringExtra("payid");
         String staffID = intent.getStringExtra("sid");
 
-        tvAmountPaid.setText(amtPaid);
-        tvChange.setText(change);
-        tvGrandTotal.setText(grangTotal);
+        Double damtPaid = Double.parseDouble(amtPaid);
+        Double dchange = Double.parseDouble(change);
+        Double dgrandTotal = Double.parseDouble(grandTotal);
+
+        tvAmountPaid.setText(String.format("RM %.2f",damtPaid));
+        tvChange.setText(String.format("RM %.2f",dchange));
+        tvGrandTotal.setText(String.format("RM %.2f",dgrandTotal));
         tvOrderID.setText(orderID);
         tvPaymentDate.setText(payDate);
         tvPaymentTime.setText(payTime);

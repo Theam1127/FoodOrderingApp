@@ -55,5 +55,10 @@
         <item>Food</item>
         <item>Drink</item>
     </string-array>
+    <string name="username">Username: </string>
+    <string name="password">Password: </string>
+    <string name="hint_username">Your Username</string>
+    <string name="hint_password">Your Password</string>
+    <string name="login">Log In</string>
 
 </resources>

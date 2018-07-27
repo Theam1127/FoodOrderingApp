@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomePage"
+            android:name=".LogIn"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -46,18 +46,28 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".RestaurantTables"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PaymentHistory"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PaymentHistoryDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddMenuActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".AddMenuActivity"/>
-        <activity android:name=".UpdateMenuActivity"/>
-        <activity android:name=".AddStaffActivity"/>
-
-
+        <activity
+            android:name=".UpdateMenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddStaffActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".HomePage"
+            android:screenOrientation="portrait"/>
+        <!--<activity
+            android:name=".LogIn"
+            android:screenOrientation="portrait"/> -->
     </application>
 
 </manifest>

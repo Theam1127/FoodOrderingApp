@@ -1,113 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/amountPaid"
         android:layout_width="85dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/amount_paid"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grandTotal" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="344dp" />
 
     <TextView
         android:id="@+id/grandTotalTextDetail"
         android:layout_width="70dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/grandTotal"
-        app:layout_constraintTop_toBottomOf="@+id/orderIDTextDetail" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="308dp" />
 
     <TextView
         android:id="@+id/change"
         android:layout_width="60dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/changes"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountPaid" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="380dp" />
 
     <TextView
         android:id="@+id/changeText"
         android:layout_width="70dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/change"
-        app:layout_constraintTop_toBottomOf="@+id/amountPaidTextDetail" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="118dp"
+        tools:layout_editor_absoluteY="380dp" />
 
     <TextView
         android:id="@+id/amountPaidTextDetail"
         android:layout_width="70dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/amountPaid"
-        app:layout_constraintTop_toBottomOf="@+id/grandTotalTextDetail" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="146dp"
+        tools:layout_editor_absoluteY="344dp" />
 
     <TextView
         android:id="@+id/grandTotal"
         android:layout_width="80dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/grand_total"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderID" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="308dp" />
 
     <TextView
         android:id="@+id/orderID"
         android:layout_width="55dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/order_id"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/staffID" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="272dp" />
 
     <TextView
         android:id="@+id/orderIDTextDetail"
         android:layout_width="70dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/orderID"
-        app:layout_constraintTop_toBottomOf="@+id/staffIDTextDetail" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="272dp" />
 
     <TextView
         android:id="@+id/paymentDate"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/payment_date"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/orderIDTextDetail"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentID" />
 
     <TextView
@@ -116,7 +100,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/paymentDate"
         app:layout_constraintTop_toBottomOf="@+id/paymentIDTextDetail" />
@@ -125,12 +109,12 @@
         android:id="@+id/paymentID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/payment_id"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/staffIDTextDetail"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -139,7 +123,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/paymentID"
         app:layout_constraintTop_toTopOf="parent" />
@@ -148,35 +132,31 @@
         android:id="@+id/staffID"
         android:layout_width="55dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:text="@string/staff_id"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="236dp" />
 
     <TextView
         android:id="@+id/staffIDTextDetail"
         android:layout_width="70dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/staffID"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="236dp" />
 
     <TextView
         android:id="@+id/paymentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/payment_time"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/grandTotalTextDetail"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentDate" />
 
     <TextView
@@ -185,7 +165,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/paymentTime"
         app:layout_constraintTop_toBottomOf="@+id/paymentDateText" />

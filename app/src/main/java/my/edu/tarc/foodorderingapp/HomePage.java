@@ -1,10 +1,13 @@
 package my.edu.tarc.foodorderingapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class HomePage extends AppCompatActivity {
 
@@ -12,6 +15,7 @@ public class HomePage extends AppCompatActivity {
     private Button btnPayHis;
     private Button btnGenerateReport;
     private Button buttonUpdateMenu, buttonAddMenu, buttonAddStaff, buttonUpdateStaff;
+    private SharedPreferences share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,11 @@ public class HomePage extends AppCompatActivity {
         buttonUpdateMenu = (Button)findViewById(R.id.buttonUpdateMenu);
         buttonAddStaff = (Button)findViewById(R.id.buttonAddStaff);
         buttonUpdateStaff = (Button)findViewById(R.id.buttonUpdateStaff);
+
+        //Yeap THeam staff ID
+        share = getSharedPreferences("staffID", Context.MODE_PRIVATE);
+        String stid = share.getString("id",null);
+
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
