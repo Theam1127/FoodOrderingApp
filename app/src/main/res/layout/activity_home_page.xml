@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".HomePage">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="360dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/restaurant_banner" />
+
     <ImageButton
         android:id="@+id/imageButtonOrder"
         android:layout_width="180dp"
@@ -42,7 +53,7 @@
         android:id="@+id/buttonLogout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/holo_red_light"
+        android:background="@android:color/holo_red_dark"
         android:text="@string/logout"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textColor="@android:color/white"
@@ -52,16 +63,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButtonMaintenance" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="360dp"
-        android:layout_height="120dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/restaurant_banner" />
 
 </android.support.constraint.ConstraintLayout>

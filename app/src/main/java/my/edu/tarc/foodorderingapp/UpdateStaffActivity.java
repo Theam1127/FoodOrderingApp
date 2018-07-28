@@ -88,8 +88,8 @@ public class UpdateStaffActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath());
-                intent.setDataAndType(uri, "text/csv");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setDataAndType(uri, "image/*");
+                intent.setAction(Intent.ACTION_PICK);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });

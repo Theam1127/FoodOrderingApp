@@ -66,6 +66,8 @@
     <string name="update_menu">Update Menu</string>
     <string name="add_staff">Add Staff</string>
     <string name="update_staff">Update Staff</string>
+    <string name="maintain_menu">Maintain Menu:</string>
+    <string name="maintain_staff">Maintain Staff:</string>
     <string-array name="position">
         <item>Chef</item>
         <item>Cleaner</item>

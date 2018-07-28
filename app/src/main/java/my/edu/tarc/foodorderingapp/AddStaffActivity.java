@@ -37,7 +37,7 @@ public class AddStaffActivity extends AppCompatActivity {
     private ImageView staffPic;
     private EditText textId,textName, textIc, textContact, textEmail;
     private Spinner spinnerPosition, spinnerStatus;
-    private DatePicker dateDOB;
+    private DatePickerScrollable dateDOB;
     private RadioButton radioGenderM, radioGenderF;
 
     private static final int PICK_IMAGE = 1;
@@ -61,7 +61,7 @@ public class AddStaffActivity extends AppCompatActivity {
         textEmail = (EditText)findViewById(R.id.editTextStaffEmail);
         spinnerPosition = (Spinner)findViewById(R.id.spinnerStaffPosition);
         spinnerStatus = (Spinner)findViewById(R.id.spinnerStaffStatus);
-        dateDOB = (DatePicker)findViewById(R.id.datePickerDOB);
+        dateDOB = findViewById(R.id.datePickerDOB);
         radioGenderM = (RadioButton)findViewById(R.id.radioButtonMale);
         radioGenderF = (RadioButton)findViewById(R.id.radioButtonFemale);
 
@@ -74,8 +74,8 @@ public class AddStaffActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath());
-                intent.setDataAndType(uri,"text/csv");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setDataAndType(uri,"image/*");
+                intent.setAction(Intent.ACTION_PICK);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
@@ -83,6 +83,10 @@ public class AddStaffActivity extends AppCompatActivity {
         addStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pd.setMessage("Please Wait...");
+                pd.setCancelable(false);
+                pd.setCanceledOnTouchOutside(false);
+                pd.show();
                 staffPicture = BitMapToString(bitmap);
                 staffId = textId.getText().toString();
                 name = textName.getText().toString();
@@ -110,10 +114,7 @@ public class AddStaffActivity extends AppCompatActivity {
                 staffMap.put("staffEmail", email);
                 staffMap.put("staffStatus", status);
 
-                pd.setMessage("Please Wait...");
-                pd.setCancelable(false);
-                pd.setCanceledOnTouchOutside(false);
-                pd.show();
+
 
                 mFirestore.collection("Staff").add(staffMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
@@ -141,11 +142,9 @@ public class AddStaffActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data) {
             /*Uri selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
