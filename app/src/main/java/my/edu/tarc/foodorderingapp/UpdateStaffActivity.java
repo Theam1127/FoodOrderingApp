@@ -43,7 +43,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     private ImageView staffPic;
     private EditText textId,textName, textIc, textContact, textEmail;
     private Spinner spinnerPosition, spinnerStatus, staffID;
-    private Bitmap bitmap, bitmap2;
+    private Bitmap bitmap, bitmap2=null;
     FirebaseFirestore mFirestore;
     private static final int PICK_IMAGE = 1;
     private int temp = 0;
@@ -108,7 +108,10 @@ public class UpdateStaffActivity extends AppCompatActivity {
                             Map<String,Object> staffMap = new HashMap<>();
 
                             String pic;
-                            pic = BitMapToString(bitmap2);
+                            if(bitmap2 == null)
+                                pic = BitMapToString(bitmap);
+                            else
+                                pic = BitMapToString(bitmap2);
                             staffMap.put("staffName",textName.getText().toString());
                             staffMap.put("staffPosition",spinnerPosition.getSelectedItem().toString());
                             staffMap.put("staffContact", textContact.getText().toString());
@@ -223,6 +226,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     public String BitMapToString(Bitmap bm){
         ByteArrayOutputStream ByteStream=new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG,100, ByteStream);
+        //bm.compress(Bitmap.CompressFormat.JPEG, 100,ByteStream);
         byte [] b=ByteStream.toByteArray();
         String temp= Base64.encodeToString(b, Base64.DEFAULT);
         return temp;
