@@ -19,7 +19,7 @@ public class MaintenanceSetting extends AppCompatActivity {
         buttonAddMenu = findViewById(R.id.buttonAddMenu);
         buttonAddStaff = findViewById(R.id.buttonAddStaff);
         buttonUpdateMenu = findViewById(R.id.buttonUpdateMenu);
-        buttonUpdateStaff = findViewById(R.id.buttonUpdateStaff);
+        buttonUpdateStaff = findViewById(R.id.buttonUpStaff);
         buttonAddMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
