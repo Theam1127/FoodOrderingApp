@@ -78,9 +78,9 @@ public class AddOrderItem extends AppCompatActivity {
                     }
                     filteredMenuName = menuItems;
                     filteredMenuList = menu;
-                    menuListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, filteredMenuName);
+                    menuListAdapter = new ArrayAdapter(AddOrderItem.this, android.R.layout.simple_list_item_1, filteredMenuName);
                     menuList.setAdapter(menuListAdapter);
-                    filterListAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, filterItems);
+                    filterListAdapter = new ArrayAdapter(AddOrderItem.this, android.R.layout.simple_dropdown_item_1line, filterItems);
                     filterDropDown.setAdapter(filterListAdapter);
                     pd.dismiss();
 
