@@ -225,7 +225,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     }
     public String BitMapToString(Bitmap bm){
         ByteArrayOutputStream ByteStream=new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG,100, ByteStream);
+        bm.compress(Bitmap.CompressFormat.JPEG,10, ByteStream);
         //bm.compress(Bitmap.CompressFormat.JPEG, 100,ByteStream);
         byte [] b=ByteStream.toByteArray();
         String temp= Base64.encodeToString(b, Base64.DEFAULT);
