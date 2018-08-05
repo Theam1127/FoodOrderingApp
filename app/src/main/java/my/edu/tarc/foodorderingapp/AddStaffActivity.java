@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -63,6 +64,7 @@ public class AddStaffActivity extends AppCompatActivity {
     private StorageTask uploadTask;
 
     String ic, staffId, name, position, dob, gender, contact, email, status, staffPicture;
+    FieldValue leaveDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class AddStaffActivity extends AppCompatActivity {
                 contact = textContact.getText().toString();
                 email = textEmail.getText().toString();
                 status = spinnerStatus.getSelectedItem().toString();
+                leaveDate = FieldValue.serverTimestamp();
 
 
                 Map<String,Object> staffMap = new HashMap<>();
@@ -131,6 +134,8 @@ public class AddStaffActivity extends AppCompatActivity {
                 staffMap.put("staffContact", contact);
                 staffMap.put("staffEmail", email);
                 staffMap.put("staffStatus", status);
+                staffMap.put("staffJoinDate", FieldValue.serverTimestamp());
+                staffMap.put("staffLeaveDate", leaveDate);
 
                 pd.setMessage("Please Wait...");
                 pd.setCancelable(false);

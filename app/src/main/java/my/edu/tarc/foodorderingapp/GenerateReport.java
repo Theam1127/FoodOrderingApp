@@ -382,7 +382,7 @@ public class GenerateReport extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot document : task.getResult()){
 
-                        int staffID = Integer.parseInt(document.getData().get("staffID").toString());
+                        String staffID = document.getData().get("staffID").toString();
                         String staffName = document.getData().get("staffName").toString();
                         String staffPosition = document.getData().get("staffPosition").toString();
                         String staffStatus = document.getData().get("staffStatus").toString();
@@ -407,7 +407,7 @@ public class GenerateReport extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot document : task.getResult()){
 
-                        Integer staffID = Integer.parseInt(document.getData().get("staffID").toString());
+                        String staffID = document.getData().get("staffID").toString();
                         String staffName = document.getData().get("staffName").toString();
                         String staffPosition = document.getData().get("staffPosition").toString();
                         String staffStatus = document.getData().get("staffStatus").toString();
@@ -425,6 +425,7 @@ public class GenerateReport extends AppCompatActivity {
                     }
 
                     //Bubble Sort
+                    /*
                     if(staffList1.size()!=0 && staffList2.size()!=0) {
                         boolean swapped = true;
                         while (swapped) {
@@ -439,7 +440,7 @@ public class GenerateReport extends AppCompatActivity {
                                 }
                             }
                         }
-                    }
+                    }*/
                     staffListAdapter = new staffListAdapter(staffListCombined, getApplicationContext());
                     menuListView.setAdapter(staffListAdapter);
                     col3TV.setWidth(100);
@@ -501,7 +502,7 @@ public class GenerateReport extends AppCompatActivity {
             TextView staffPositionTV = (TextView)view1.findViewById(R.id.staffPositionTV);
             TextView staffStatusTV = (TextView)view1.findViewById(R.id.staffStatusTV);
 
-            staffIDTV.setText(Integer.toString(staffList.get(pos).getStaffID()));
+            staffIDTV.setText(staffList.get(pos).getStaffID());
             staffNameTV.setText(staffList.get(pos).getStaffName());
             staffPositionTV.setText(staffList.get(pos).getStaffPosition());
             staffStatusTV.setText(staffList.get(pos).getStaffStatus());
@@ -609,23 +610,23 @@ public class GenerateReport extends AppCompatActivity {
     }
 
     public class staff{
-        private int staffID;
+        private String staffID;
         private String staffName;
         private String staffPosition;
         private String staffStatus;
 
-        public staff(int staffID, String staffName, String staffPosition, String staffStatus) {
+        public staff(String staffID, String staffName, String staffPosition, String staffStatus) {
             this.staffID = staffID;
             this.staffName = staffName;
             this.staffPosition = staffPosition;
             this.staffStatus = staffStatus;
         }
 
-        public int getStaffID() {
+        public String getStaffID() {
             return staffID;
         }
 
-        public void setStaffID(int staffID) {
+        public void setStaffID(String staffID) {
             this.staffID = staffID;
         }
 
