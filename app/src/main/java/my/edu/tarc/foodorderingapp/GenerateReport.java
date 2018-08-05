@@ -418,14 +418,14 @@ public class GenerateReport extends AppCompatActivity {
 
                     for(int i = 0; i < staffList1.size(); i++){
                         for(int j = 0; j < staffList2.size(); j++){
-                            if(staffList1.get(i).getStaffID() == staffList2.get(j).getStaffID()){
+                            if(staffList1.get(i).getStaffID().equals(staffList2.get(j).getStaffID())){
                                 staffListCombined.add(staffList1.get(i));
                             }
                         }
                     }
 
                     //Bubble Sort
-                    /*
+
                     if(staffList1.size()!=0 && staffList2.size()!=0) {
                         boolean swapped = true;
                         while (swapped) {
@@ -440,7 +440,7 @@ public class GenerateReport extends AppCompatActivity {
                                 }
                             }
                         }
-                    }*/
+                    }
                     staffListAdapter = new staffListAdapter(staffListCombined, getApplicationContext());
                     menuListView.setAdapter(staffListAdapter);
                     col3TV.setWidth(100);
