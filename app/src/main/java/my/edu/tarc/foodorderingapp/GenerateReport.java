@@ -443,8 +443,8 @@ public class GenerateReport extends AppCompatActivity {
                     }
                     staffListAdapter = new staffListAdapter(staffListCombined, getApplicationContext());
                     menuListView.setAdapter(staffListAdapter);
-                    col3TV.setWidth(100);
-                    col4TV.setWidth(420);
+                    col3TV.setWidth(190);
+                    col4TV.setWidth(400);
                     col5TV.setWidth(190);
                     col6TV.setWidth(190);
                     col3TV.setText("ID");
