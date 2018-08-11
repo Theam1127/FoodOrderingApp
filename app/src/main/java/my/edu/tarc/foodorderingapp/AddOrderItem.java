@@ -57,7 +57,7 @@ public class AddOrderItem extends AppCompatActivity {
         menuList = (ListView) findViewById(R.id.menuList);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         filterItems.add("All");
-        db.collection("Menu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Menu").whereEqualTo("menuStatus", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
