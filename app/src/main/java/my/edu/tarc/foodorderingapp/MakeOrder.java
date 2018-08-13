@@ -49,7 +49,6 @@ public class MakeOrder extends AppCompatActivity {
     Orders o;
     double total;
     int nextID = 1;
-    boolean load = false;
     static final int ADD_ORDER_ITEM = 102, EDIT_ORDER_ITEM = 103;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class MakeOrder extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (total != 0) {
-                    load=true;
                     Intent intent = new Intent(getApplicationContext(), MakePayment.class);
                     intent.putExtra("totalAmount", total);
                     intent.putExtra("orderID", orderID);
@@ -201,11 +199,9 @@ public class MakeOrder extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_CANCELED)
-            load=false;
+
         if (requestCode == ADD_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
             nextID=1;
-            load = false;
             pd.show();
             final Orders order = (Orders) data.getSerializableExtra("addOrder");
             if (orderID == 0) {
@@ -272,17 +268,19 @@ public class MakeOrder extends AppCompatActivity {
             }
 
         } else if (requestCode == EDIT_ORDER_ITEM && resultCode!=RESULT_CANCELED) {
-            load = false;
-            pd.show();
             final Orders order = (Orders) data.getSerializableExtra("editedOrderItem");
             final boolean remove = data.getBooleanExtra("removeEditItem", false);
+            pd.show();
             db.collection("OrderDetail").whereEqualTo("orderID", orderID).whereEqualTo("menuID", order.getMenuID()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    int qty=0;
                     if (task.isSuccessful()) {
                         String docID = "";
-                        for (QueryDocumentSnapshot doc : task.getResult())
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
                             docID = doc.getId();
+                            qty = Integer.parseInt(doc.get("quantity").toString());
+                        }
                         if (!remove) {
                             Map<String, Object> editOrder = new HashMap<>();
                             editOrder.put("quantity", order.getQuantity());
@@ -291,6 +289,8 @@ public class MakeOrder extends AppCompatActivity {
                         } else {
                             db.collection("OrderDetail").document(docID).delete();
                         }
+                        if(qty==order.getQuantity())
+                            pd.dismiss();
                     }
                 }
             });
