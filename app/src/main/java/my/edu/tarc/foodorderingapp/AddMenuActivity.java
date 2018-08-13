@@ -74,6 +74,15 @@ public class AddMenuActivity extends AppCompatActivity {
 
         pd.dismiss();
 
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextDesc.setText("");
+                editTextName.setText("");
+                editTextPrice.setText("");
+            }
+        });
+
         addMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

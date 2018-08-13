@@ -67,6 +67,14 @@ public class UpdateMenuActivity extends AppCompatActivity {
 
         loadActivity();
 
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editName.setText("");
+                editDesc.setText("");
+                editPrice.setText("");
+            }
+        });
 
         buttonUpdate = (Button) findViewById(R.id.buttonUpdateMenu);
         buttonUpdate.setOnClickListener(new View.OnClickListener() {

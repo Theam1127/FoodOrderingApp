@@ -39,7 +39,7 @@ import java.util.Map;
 public class UpdateStaffActivity extends AppCompatActivity {
 
     ProgressDialog pd;
-    private Button browse, updateStaff;
+    private Button browse, updateStaff,reset;
     private ImageView staffPic;
     private EditText textId,textName, textIc, textContact, textEmail;
     private Spinner spinnerPosition, spinnerStatus, staffID;
@@ -64,6 +64,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         browse = (Button) findViewById(R.id.buttonBrowse2);
         staffPic = (ImageView) findViewById(R.id.imageViewStaff2);
         updateStaff = (Button) findViewById(R.id.buttonUpdateStaff);
+        reset = (Button) findViewById(R.id.buttonReset5);
         staffID = (Spinner) findViewById(R.id.spinnerStaffId);
         textName = (EditText) findViewById(R.id.editTextStaffName2);
         textContact = (EditText) findViewById(R.id.editTextStaffContact2);
@@ -91,6 +92,15 @@ public class UpdateStaffActivity extends AppCompatActivity {
                 intent.setDataAndType(uri, "image/*");
                 intent.setAction(Intent.ACTION_PICK);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            }
+        });
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textName.setText("");
+                textContact.setText("");
+                textEmail.setText("");
             }
         });
 
