@@ -22,7 +22,7 @@
                 android:id="@+id/imageViewStaff2"
                 android:layout_width="match_parent"
                 android:layout_height="201dp"
-                app:srcCompat="@drawable/cy" />
+                app:srcCompat="@drawable/user_icon" />
 
             <Button
                 android:id="@+id/buttonBrowse2"
